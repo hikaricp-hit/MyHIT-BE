@@ -63,17 +63,52 @@ public class JwtTokenProvider {
 
   public Authentication getAuthenticationByRefreshToken(String refreshToken) {
     Claims claims = Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(refreshToken).getBody();
-    if (!claims.get(CLAIM_TYPE).equals(TYPE_REFRESH) || ObjectUtils.isEmpty(claims.get(AUTHORITIES_KEY))
-        || ObjectUtils.isEmpty(claims.get(USERNAME_KEY))) {
+    if (!claims.get(CLAIM_TYPE).equals(TYPE_REFRESH) ||
+            ObjectUtils.isEmpty(claims.get(AUTHORITIES_KEY)) ||
+            ObjectUtils.isEmpty(claims.get(USERNAME_KEY))) {
       throw new InvalidException(ErrorMessage.Auth.INVALID_REFRESH_TOKEN);
     }
+
     Collection<? extends GrantedAuthority> authorities =
-        Arrays.stream(claims.get(AUTHORITIES_KEY).toString().split(","))
-            .map(SimpleGrantedAuthority::new)
-            .collect(Collectors.toList());
-    UserDetails principal = new UserPrincipal(claims.get(USERNAME_KEY).toString(), "", authorities);
+            Arrays.stream(claims.get(AUTHORITIES_KEY).toString().split(","))
+                    .map(SimpleGrantedAuthority::new)
+                    .collect(Collectors.toList());
+
+    String id = claims.get("id").toString();
+    String username = claims.get(USERNAME_KEY).toString();
+    String fullName = claims.get("fullName").toString();
+    String email = claims.get("email").toString();
+    String avatar = claims.get("avatar").toString();
+    String phone = claims.get("phone").toString();
+    String address = claims.get("address").toString();
+    String className = claims.get("className").toString();
+    String birth = claims.get("birth").toString();
+    String gen = claims.get("gen").toString();
+    Integer numberCourse = Integer.valueOf(claims.get("numberCourse").toString());
+    String status = claims.get("status").toString();
+    String qr = claims.get("qr").toString();
+
+    UserDetails principal = new UserPrincipal(
+            id,
+            username,
+            "",  // password is empty because it's not needed for this purpose
+            fullName,
+            email,
+            avatar,
+            phone,
+            address,
+            className,
+            birth,
+            gen,
+            numberCourse,
+            status,
+            qr,
+            authorities
+    );
+
     return new UsernamePasswordAuthenticationToken(principal, "", authorities);
   }
+
 
   public String extractClaimUsername(String token) {
     return Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token).getBody().get(USERNAME_KEY).toString();

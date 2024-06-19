@@ -14,8 +14,8 @@ import javax.persistence.*;
 @Setter
 @Builder
 @Entity
-@Table(name = "users")
-public class User extends DateAuditing {
+@Table(name = "members")
+public class Member extends DateAuditing {
 
   @Id
   @GeneratedValue(generator = "uuid2")
@@ -32,11 +32,47 @@ public class User extends DateAuditing {
 
   @Nationalized
   @Column(nullable = false)
-  private String firstName;
+  private String fullName;
 
   @Nationalized
   @Column(nullable = false)
-  private String lastName;
+  private String email;
+
+  @Nationalized
+  @Column(nullable = false)
+  private String avatar;
+
+  @Nationalized
+  @Column(nullable = false)
+  private String phone;
+
+  @Nationalized
+  @Column(nullable = false)
+  private String address;
+
+  @Nationalized
+  @Column(nullable = false)
+  private String className;
+
+  @Nationalized
+  @Column(nullable = false)
+  private String birth;
+
+  @Nationalized
+  @Column(nullable = false)
+  private String gen;
+
+  @Nationalized
+  @Column(nullable = false)
+  private Integer numberCourse;
+
+  @Nationalized
+  @Column(nullable = false)
+  private String status ;
+
+  @Nationalized
+  @Column(nullable = false)
+  private String qr;
 
   //Link to table Role
   @ManyToOne

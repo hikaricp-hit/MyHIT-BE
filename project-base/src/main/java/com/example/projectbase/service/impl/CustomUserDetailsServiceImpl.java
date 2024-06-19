@@ -1,7 +1,7 @@
 package com.example.projectbase.service.impl;
 
 import com.example.projectbase.constant.ErrorMessage;
-import com.example.projectbase.domain.entity.User;
+import com.example.projectbase.domain.entity.Member;
 import com.example.projectbase.security.UserPrincipal;
 import com.example.projectbase.service.CustomUserDetailsService;
 import com.example.projectbase.exception.NotFoundException;
@@ -23,18 +23,18 @@ public class CustomUserDetailsServiceImpl implements UserDetailsService, CustomU
   @Override
   @Transactional
   public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-    User user = userRepository.findByUsername(username)
+    Member member = userRepository.findByUsername(username)
         .orElseThrow(() -> new NotFoundException(ErrorMessage.User.ERR_NOT_FOUND_USERNAME,
             new String[]{username}));
-    return UserPrincipal.create(user);
+    return UserPrincipal.create(member);
   }
 
   @Override
   @Transactional
   public UserDetails loadUserById(String id) {
-    User user = userRepository.findById(id)
+    Member member = userRepository.findById(id)
         .orElseThrow(() -> new NotFoundException(ErrorMessage.User.ERR_NOT_FOUND_ID, new String[]{id}));
-    return UserPrincipal.create(user);
+    return UserPrincipal.create(member);
   }
 
 }

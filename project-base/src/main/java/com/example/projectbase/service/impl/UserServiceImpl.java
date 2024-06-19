@@ -5,7 +5,7 @@ import com.example.projectbase.constant.SortByDataConstant;
 import com.example.projectbase.domain.dto.pagination.PaginationFullRequestDto;
 import com.example.projectbase.domain.dto.pagination.PaginationResponseDto;
 import com.example.projectbase.domain.dto.response.UserDto;
-import com.example.projectbase.domain.entity.User;
+import com.example.projectbase.domain.entity.Member;
 import com.example.projectbase.domain.mapper.UserMapper;
 import com.example.projectbase.exception.NotFoundException;
 import com.example.projectbase.repository.UserRepository;
@@ -26,9 +26,9 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public UserDto getUserById(String userId) {
-    User user = userRepository.findById(userId)
+    Member member = userRepository.findById(userId)
         .orElseThrow(() -> new NotFoundException(ErrorMessage.User.ERR_NOT_FOUND_ID, new String[]{userId}));
-    return userMapper.toUserDto(user);
+    return userMapper.toUserDto(member);
   }
 
   @Override
@@ -41,8 +41,8 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public UserDto getCurrentUser(UserPrincipal principal) {
-    User user = userRepository.getUser(principal);
-    return userMapper.toUserDto(user);
+    Member member = userRepository.getUser(principal);
+    return userMapper.toUserDto(member);
   }
 
 }

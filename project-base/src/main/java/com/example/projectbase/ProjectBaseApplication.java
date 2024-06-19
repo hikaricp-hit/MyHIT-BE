@@ -3,7 +3,7 @@ package com.example.projectbase;
 import com.example.projectbase.config.properties.AdminInfoProperties;
 import com.example.projectbase.constant.RoleConstant;
 import com.example.projectbase.domain.entity.Role;
-import com.example.projectbase.domain.entity.User;
+import com.example.projectbase.domain.entity.Member;
 import com.example.projectbase.repository.RoleRepository;
 import com.example.projectbase.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -53,11 +53,22 @@ public class ProjectBaseApplication {
       }
       //init admin
       if (userRepository.count() == 0) {
-        User admin = User.builder().username(userInfo.getUsername())
-            .password(passwordEncoder.encode(userInfo.getPassword()))
-            .firstName(userInfo.getFirstName()).lastName(userInfo.getLastName())
-            .role(roleRepository.findByRoleName(RoleConstant.ADMIN)).build();
-        userRepository.save(admin);
+        Member admin = Member.builder()
+                             .username(userInfo.getUsername())
+                             .password(passwordEncoder.encode(userInfo.getPassword()))
+                             .fullName(userInfo.getFullName())
+                             .email(userInfo.getEmail())
+                             .avatar(userInfo.getAvatar())
+                             .phone(userInfo.getPhone())
+                             .address(userInfo.getAddress())
+                             .className(userInfo.getClassName())
+                             .birth(userInfo.getBirth())
+                             .gen(userInfo.getGen())
+                             .numberCourse(userInfo.getNumberCourse())
+                             .status(userInfo.getStatus())
+                             .qr(userInfo.getQr())
+                             .role(roleRepository.findByRoleName(RoleConstant.ADMIN)).build();
+                             userRepository.save(admin);
       }
     };
   }
