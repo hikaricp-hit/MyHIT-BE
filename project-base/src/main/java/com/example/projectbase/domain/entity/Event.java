@@ -1,11 +1,13 @@
 package com.example.projectbase.domain.entity;
 
-import com.example.projectbase.domain.entity.common.DateAuditing;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Nationalized;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -13,8 +15,8 @@ import javax.persistence.*;
 @Setter
 @Builder
 @Entity
-@Table(name = "questions")
-public class Question {
+@Table(name = "events")
+public class Event {
     @Id
     @GeneratedValue(generator = "uuid2")
     @GenericGenerator(name = "uuid2", strategy = "org.hibernate.id.UUIDGenerator")
@@ -23,26 +25,34 @@ public class Question {
 
     @Nationalized
     @Column(nullable = false)
-    private String content;
+    private String name;
 
     @Nationalized
     @Column(nullable = false)
-    private String status;
-
-    @Nationalized
-    @Column
-    private String answer;
+    private String type;
 
     @Nationalized
     @Column(nullable = false)
-    private String askDate;
+    private String location;
 
     @Nationalized
     @Column(nullable = false)
-    private String responseDate;
+    private String startDate;
 
-    //Link to table Member
-    @ManyToOne
-    @JoinColumn(name = "member_id", foreignKey = @ForeignKey(name = "FK_MEMBER_QUESTION"))
-    private Member member;
+    @Nationalized
+    @Column(nullable = false)
+    private String endDate;
+
+    @Nationalized
+    @Column(nullable = false)
+    private String startTime;
+
+    @Nationalized
+    @Column(nullable = false)
+    private String endTime;
+
+    //Link to table Member_Event
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "event")
+    @JsonIgnore
+    private Set<Member_Event> member_events = new HashSet<>();
 }

@@ -1,11 +1,13 @@
 package com.example.projectbase.domain.entity;
 
-import com.example.projectbase.domain.entity.common.DateAuditing;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Nationalized;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -13,8 +15,8 @@ import javax.persistence.*;
 @Setter
 @Builder
 @Entity
-@Table(name = "questions")
-public class Question {
+@Table(name = "courses")
+public class Course {
     @Id
     @GeneratedValue(generator = "uuid2")
     @GenericGenerator(name = "uuid2", strategy = "org.hibernate.id.UUIDGenerator")
@@ -23,26 +25,30 @@ public class Question {
 
     @Nationalized
     @Column(nullable = false)
-    private String content;
+    private String name;
+
+    @Nationalized
+    @Column(nullable = false)
+    private String detail;
+
+    @Nationalized
+    @Column(nullable = false)
+    private String leader;
+
+    @Nationalized
+    @Column(nullable = false)
+    private String startDate;
+
+    @Nationalized
+    @Column(nullable = false)
+    private String picture;
 
     @Nationalized
     @Column(nullable = false)
     private String status;
 
-    @Nationalized
-    @Column
-    private String answer;
-
-    @Nationalized
-    @Column(nullable = false)
-    private String askDate;
-
-    @Nationalized
-    @Column(nullable = false)
-    private String responseDate;
-
-    //Link to table Member
-    @ManyToOne
-    @JoinColumn(name = "member_id", foreignKey = @ForeignKey(name = "FK_MEMBER_QUESTION"))
-    private Member member;
+    //Link to table Register
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "course")
+    @JsonIgnore
+    private Set<Register> registers = new HashSet<>();
 }

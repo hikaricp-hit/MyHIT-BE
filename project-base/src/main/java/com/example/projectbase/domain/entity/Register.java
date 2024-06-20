@@ -12,8 +12,8 @@ import javax.persistence.*;
 @Setter
 @Builder
 @Entity
-@Table(name = "members_notifications")
-public class Member_Notification {
+@Table(name = "registers")
+public class Register {
     @Id
     @GeneratedValue(generator = "uuid2")
     @GenericGenerator(name = "uuid2", strategy = "org.hibernate.id.UUIDGenerator")
@@ -22,15 +22,15 @@ public class Member_Notification {
 
     //Link to table Member
     @ManyToOne
-    @JoinColumn(name = "member_id", foreignKey = @ForeignKey(name = "FK_MEMBER_NOTIFICATION"))
-    private Member notifiedMember;
+    @JoinColumn(name = "member_id", foreignKey = @ForeignKey(name = "FK_REGISTER_MEMBER"))
+    private Member subscriber;
 
-    //Link to table Notification
+    //Link to table Course
     @ManyToOne
-    @JoinColumn(name = "notification_id", foreignKey = @ForeignKey(name = "FK_NOTIFICATION_MEMBER"))
-    private Notification notification;
+    @JoinColumn(name = "course_id", foreignKey = @ForeignKey(name = "FK_REGISTER_COURSE"))
+    private Course course;
 
     @Nationalized
     @Column(nullable = false)
-    private String type;
+    private String status;
 }
