@@ -7,6 +7,8 @@ import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Nationalized;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -76,7 +78,11 @@ public class Member extends DateAuditing {
 
   //Link to table Role
   @ManyToOne
-  @JoinColumn(name = "role_id", foreignKey = @ForeignKey(name = "FK_USER_ROLE"))
+  @JoinColumn(name = "role_id", foreignKey = @ForeignKey(name = "FK_MEMBER_ROLE"))
   private Role role;
 
+  //Link to table Question
+  @OneToMany(cascade = CascadeType.ALL, mappedBy = "member")
+  @JsonIgnore
+  private Set<Question> questions = new HashSet<>();
 }
