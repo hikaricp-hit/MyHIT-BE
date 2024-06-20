@@ -85,4 +85,9 @@ public class Member extends DateAuditing {
   @OneToMany(cascade = CascadeType.ALL, mappedBy = "member")
   @JsonIgnore
   private Set<Question> questions = new HashSet<>();
+
+  //Link to table Member_Notification
+  @OneToMany(cascade = CascadeType.ALL, mappedBy = "notifiedMember")
+  @JsonIgnore
+  private Set<Member_Notification> memberNotifications= new HashSet<>();
 }
