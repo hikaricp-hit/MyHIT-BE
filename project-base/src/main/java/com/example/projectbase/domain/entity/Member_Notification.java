@@ -30,7 +30,5 @@ public class Member_Notification {
     @JoinColumn(name = "notification_id", foreignKey = @ForeignKey(name = "FK_NOTIFICATION_MEMBER"))
     private Notification notification;
 
-    @Nationalized
-    @Column(nullable = false)
-    private String type;
+
 }

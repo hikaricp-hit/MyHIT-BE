@@ -17,4 +17,5 @@ public class NotificationProperties {
     private String name;
     private String detail;
     private String sendDate;
+    private String type;
 }

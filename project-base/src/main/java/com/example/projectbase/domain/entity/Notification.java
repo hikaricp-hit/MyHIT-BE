@@ -35,6 +35,10 @@ public class Notification {
     @Column(nullable = false)
     private String sendDate;
 
+    @Nationalized
+    @Column(nullable = false)
+    private String type;
+
     //Link to table Member_Notification
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "notification")
     @JsonIgnore
