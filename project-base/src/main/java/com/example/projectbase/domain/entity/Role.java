@@ -23,9 +23,9 @@ public class Role {
   @Column(nullable = false)
   private String name;
 
-  //Link to table User
+  //Link to table Member
   @OneToMany(cascade = CascadeType.ALL, mappedBy = "role")
   @JsonIgnore
-  private Set<User> users = new HashSet<>();
+  private Set<Member> members = new HashSet<>();
 
 }
