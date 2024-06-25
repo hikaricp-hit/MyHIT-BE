@@ -4,11 +4,14 @@ import com.example.projectbase.domain.entity.Member_Notification;
 import com.example.projectbase.repository.Member_NotificationRepository;
 import com.example.projectbase.service.MemberService;
 import com.example.projectbase.service.Member_NotificationService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
+@Service
+@RequiredArgsConstructor
 public class Member_NotificationServiceImpl implements Member_NotificationService {
     private Member_NotificationRepository member_notificationRepository;
     private NotificationServiceImpl notificationService;
