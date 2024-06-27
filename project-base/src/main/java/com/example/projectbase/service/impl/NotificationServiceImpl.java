@@ -40,7 +40,12 @@ public class NotificationServiceImpl implements NotificationService {
 
     @Override
     public List<NotificationDto> getGeneralNotification() {
-        return notificationRepository.findAllNotificationsByType("general");
+        List<Notification> notifications = notificationRepository.findAllNotificationsByType("general");
+        List<NotificationDto> notificationDtos = new ArrayList<>();
+        for (Notification notification : notifications) {
+            notificationDtos.add(notificationMapper.toDto(notification));
+        }
+        return notificationDtos;
     }
 
     @Override
@@ -62,8 +67,8 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     @Override
-    public NotificationDto updateNotification(String notificaitonId, NotificationCreateDto notificationCreateDto) {
-        Optional<Notification> notification= notificationRepository.findById(notificaitonId);
+    public NotificationDto updateNotification(String notificaitonName, NotificationCreateDto notificationCreateDto) {
+        Optional<Notification> notification= Optional.ofNullable(notificationRepository.findNotificationByName(notificaitonName));
         notification.get().setName(notificationCreateDto.getName());
         notification.get().setDetail(notificationCreateDto.getDetail());
         notification.get().setSendDate(notificationCreateDto.getSendDate());
@@ -72,8 +77,8 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     @Override
-    public void deleteNotification(String notificationId) {
-        Optional<Notification> notification= notificationRepository.findById(notificationId);
-        notificationRepository.deleteById(notificationId);
+    public void deleteNotification(String notificationName) {
+        Optional<Notification> notification= Optional.ofNullable(notificationRepository.findNotificationByName(notificationName));
+        notificationRepository.deleteById(notification.get().getId());
     }
 }

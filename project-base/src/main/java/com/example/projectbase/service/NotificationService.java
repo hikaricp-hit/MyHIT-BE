@@ -12,6 +12,6 @@ public interface NotificationService {
     List<NotificationDto> getGeneralNotification();
     List<NotificationDto> getPersonalNotification(String memberId);
     Notification findNotificationById(String notificationId) throws Exception;
-    NotificationDto updateNotification(String notificaitonId, NotificationCreateDto notificationCreateDto);
-    void deleteNotification(String notificationId);
+    NotificationDto updateNotification(String notificationName, NotificationCreateDto notificationCreateDto);
+    void deleteNotification(String notificationName);
 }

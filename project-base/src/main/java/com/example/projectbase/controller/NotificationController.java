@@ -43,16 +43,16 @@ public class NotificationController {
 
     @Tag(name = "note-controller-admin")
     @Operation(summary = "API update notification")
-    @PutMapping("/notification/{notificationId}")
-    public ResponseEntity<?> update(@PathVariable String notificationId, @RequestBody NotificationCreateDto notificationCreateDto) {
-        return ResponseEntity.ok().body(notificationService.updateNotification(notificationId, notificationCreateDto));
+    @PutMapping("/notification/{notificationName}")
+    public ResponseEntity<?> update(@PathVariable String notificationName, @RequestBody NotificationCreateDto notificationCreateDto) {
+        return ResponseEntity.ok().body(notificationService.updateNotification(notificationName, notificationCreateDto));
     }
 
     @Tag(name = "note-controller-admin")
     @Operation(summary = "API delete notification")
-    @DeleteMapping("/notification/{notificationId}")
-    public ResponseEntity<?> deleteNotification(@PathVariable String notificationId) {
-        notificationService.deleteNotification(notificationId);
+    @DeleteMapping("/notification/{notificationName}")
+    public ResponseEntity<?> deleteNotification(@PathVariable String notificationName) {
+        notificationService.deleteNotification(notificationName);
         return ResponseEntity.ok().build();
     }
 }
