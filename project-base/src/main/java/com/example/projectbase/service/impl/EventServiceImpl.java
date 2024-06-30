@@ -7,7 +7,7 @@ import com.example.projectbase.exception.NotFoundException;
 import com.example.projectbase.exception.InvalidException;
 import com.example.projectbase.repository.EventRepository;
 import com.example.projectbase.service.EventService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,10 +15,14 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class EventServiceImpl implements EventService {
 
-    @Autowired
-    private EventRepository eventRepository;
+    private final EventRepository eventRepository;
+
+    public static final String TYPE_CLASS = "Class";
+    public static final String TYPE_ACTIVITY = "Activity";
+    public static final String TYPE_OFFLINE = "Offline";
 
     @Override
     public List<EventResponseDTO> getAllEvents() {
@@ -46,11 +50,26 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public EventResponseDTO createEvent(EventRequestDTO eventRequestDTO) {
+    public EventResponseDTO createClassEvent(EventRequestDTO eventRequestDTO) {
+        return createEventWithType(eventRequestDTO, TYPE_CLASS);
+    }
+
+    @Override
+    public EventResponseDTO createActivityEvent(EventRequestDTO eventRequestDTO) {
+        return createEventWithType(eventRequestDTO, TYPE_ACTIVITY);
+    }
+
+    @Override
+    public EventResponseDTO createOfflineEvent(EventRequestDTO eventRequestDTO) {
+        return createEventWithType(eventRequestDTO, TYPE_OFFLINE);
+    }
+
+    private EventResponseDTO createEventWithType(EventRequestDTO eventRequestDTO, String type) {
         if (eventRequestDTO.getName() == null || eventRequestDTO.getName().isEmpty()) {
             throw new InvalidException("Event name cannot be empty");
         }
         Event event = convertToEntity(eventRequestDTO);
+        event.setType(type);
         Event savedEvent = eventRepository.save(event);
         return convertToDTO(savedEvent);
     }
@@ -67,6 +86,9 @@ public class EventServiceImpl implements EventService {
             event.setEndDate(eventRequestDTO.getEndDate());
             event.setStartTime(eventRequestDTO.getStartTime());
             event.setEndTime(eventRequestDTO.getEndTime());
+            if (!isValidEventType(event.getType())) {
+                throw new InvalidException("Invalid event type");
+            }
             Event updatedEvent = eventRepository.save(event);
             return convertToDTO(updatedEvent);
         } else {
@@ -105,5 +127,9 @@ public class EventServiceImpl implements EventService {
         event.setStartTime(eventRequestDTO.getStartTime());
         event.setEndTime(eventRequestDTO.getEndTime());
         return event;
+    }
+
+    private boolean isValidEventType(String type) {
+        return TYPE_CLASS.equals(type) || TYPE_ACTIVITY.equals(type) || TYPE_OFFLINE.equals(type);
     }
 }

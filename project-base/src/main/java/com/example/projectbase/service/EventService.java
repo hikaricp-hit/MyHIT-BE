@@ -10,7 +10,9 @@ public interface EventService {
     List<EventResponseDTO> getEventsByType(String type);
     List<EventResponseDTO> getEventsByDate(String date);
     EventResponseDTO getEventById(String id);
-    EventResponseDTO createEvent(EventRequestDTO eventRequestDTO);
+    EventResponseDTO createClassEvent(EventRequestDTO eventRequestDTO);
+    EventResponseDTO createActivityEvent(EventRequestDTO eventRequestDTO);
+    EventResponseDTO createOfflineEvent(EventRequestDTO eventRequestDTO);
     EventResponseDTO updateEvent(String id, EventRequestDTO eventRequestDTO);
     void deleteEvent(String id);
 }
