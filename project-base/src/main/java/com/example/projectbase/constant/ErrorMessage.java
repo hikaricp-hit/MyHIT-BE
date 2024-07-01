@@ -36,4 +36,8 @@ public class ErrorMessage {
     public static final String INVALID_EVENT_TYPE = "Invalid event type";
     public static final String EMPTY_EVENT_NAME = "Event name cannot be empty";
   }
+  public static class Notification {
+    public static final String ERR_NOT_FOUND_USERNAME = "exception.notification.not.found.username";
+    public static final String ERR_NOT_FOUND_ID = "exception.notification.not.found.id";
+  }
 }
