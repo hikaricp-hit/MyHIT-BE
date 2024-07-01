@@ -14,5 +14,5 @@ public interface EventService {
     EventResponseDTO createActivityEvent(EventRequestDTO eventRequestDTO);
     EventResponseDTO createOfflineEvent(EventRequestDTO eventRequestDTO);
     EventResponseDTO updateEvent(String id, EventRequestDTO eventRequestDTO);
-    void deleteEvent(String id);
+    boolean deleteEvent(String id);
 }

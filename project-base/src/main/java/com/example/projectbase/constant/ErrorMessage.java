@@ -31,4 +31,9 @@ public class ErrorMessage {
     public static final String ERR_NOT_FOUND_ID = "exception.user.not.found.id";
   }
 
+  public static class Event {
+    public static final String EVENT_NOT_FOUND = "Event not found with id: ";
+    public static final String INVALID_EVENT_TYPE = "Invalid event type";
+    public static final String EMPTY_EVENT_NAME = "Event name cannot be empty";
+  }
 }

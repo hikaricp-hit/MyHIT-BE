@@ -1,10 +1,13 @@
 package com.example.projectbase.service.impl;
 
+import com.example.projectbase.constant.ErrorMessage;
+import com.example.projectbase.constant.EventConstant;
 import com.example.projectbase.domain.entity.Event;
 import com.example.projectbase.domain.dto.request.EventRequestDTO;
 import com.example.projectbase.domain.dto.response.EventResponseDTO;
 import com.example.projectbase.exception.NotFoundException;
 import com.example.projectbase.exception.InvalidException;
+import com.example.projectbase.domain.mapper.EventMapper;
 import com.example.projectbase.repository.EventRepository;
 import com.example.projectbase.service.EventService;
 import lombok.RequiredArgsConstructor;
@@ -19,59 +22,56 @@ import java.util.stream.Collectors;
 public class EventServiceImpl implements EventService {
 
     private final EventRepository eventRepository;
-
-    public static final String TYPE_CLASS = "Class";
-    public static final String TYPE_ACTIVITY = "Activity";
-    public static final String TYPE_OFFLINE = "Offline";
+    private final EventMapper eventMapper = EventMapper.INSTANCE;
 
     @Override
     public List<EventResponseDTO> getAllEvents() {
-        return eventRepository.findAll().stream().map(this::convertToDTO).collect(Collectors.toList());
+        return eventRepository.findAll().stream().map(eventMapper::toDTO).collect(Collectors.toList());
     }
 
     @Override
     public List<EventResponseDTO> getEventsByType(String type) {
-        return eventRepository.findByType(type).stream().map(this::convertToDTO).collect(Collectors.toList());
+        return eventRepository.findByType(type).stream().map(eventMapper::toDTO).collect(Collectors.toList());
     }
 
     @Override
     public List<EventResponseDTO> getEventsByDate(String date) {
-        return eventRepository.findByDate(date).stream().map(this::convertToDTO).collect(Collectors.toList());
+        return eventRepository.findByDate(date).stream().map(eventMapper::toDTO).collect(Collectors.toList());
     }
 
     @Override
     public EventResponseDTO getEventById(String id) {
         Optional<Event> eventOptional = eventRepository.findById(id);
         if (eventOptional.isPresent()) {
-            return convertToDTO(eventOptional.get());
+            return eventMapper.toDTO(eventOptional.get());
         } else {
-            throw new NotFoundException("Event not found with id: " + id);
+            throw new NotFoundException(ErrorMessage.Event.EVENT_NOT_FOUND + id);
         }
     }
 
     @Override
     public EventResponseDTO createClassEvent(EventRequestDTO eventRequestDTO) {
-        return createEventWithType(eventRequestDTO, TYPE_CLASS);
+        return createEventWithType(eventRequestDTO, EventConstant.TYPE_CLASS);
     }
 
     @Override
     public EventResponseDTO createActivityEvent(EventRequestDTO eventRequestDTO) {
-        return createEventWithType(eventRequestDTO, TYPE_ACTIVITY);
+        return createEventWithType(eventRequestDTO, EventConstant.TYPE_ACTIVITY);
     }
 
     @Override
     public EventResponseDTO createOfflineEvent(EventRequestDTO eventRequestDTO) {
-        return createEventWithType(eventRequestDTO, TYPE_OFFLINE);
+        return createEventWithType(eventRequestDTO, EventConstant.TYPE_OFFLINE);
     }
 
     private EventResponseDTO createEventWithType(EventRequestDTO eventRequestDTO, String type) {
         if (eventRequestDTO.getName() == null || eventRequestDTO.getName().isEmpty()) {
-            throw new InvalidException("Event name cannot be empty");
+            throw new InvalidException(ErrorMessage.Event.EMPTY_EVENT_NAME);
         }
-        Event event = convertToEntity(eventRequestDTO);
+        Event event = eventMapper.toEntity(eventRequestDTO);
         event.setType(type);
         Event savedEvent = eventRepository.save(event);
-        return convertToDTO(savedEvent);
+        return eventMapper.toDTO(savedEvent);
     }
 
     @Override
@@ -87,49 +87,25 @@ public class EventServiceImpl implements EventService {
             event.setStartTime(eventRequestDTO.getStartTime());
             event.setEndTime(eventRequestDTO.getEndTime());
             if (!isValidEventType(event.getType())) {
-                throw new InvalidException("Invalid event type");
+                throw new InvalidException(ErrorMessage.Event.INVALID_EVENT_TYPE);
             }
             Event updatedEvent = eventRepository.save(event);
-            return convertToDTO(updatedEvent);
+            return eventMapper.toDTO(updatedEvent);
         } else {
-            throw new NotFoundException("Event not found with id: " + id);
+            throw new NotFoundException(ErrorMessage.Event.EVENT_NOT_FOUND + id);
         }
     }
 
     @Override
-    public void deleteEvent(String id) {
+    public boolean deleteEvent(String id) {
         if (!eventRepository.existsById(id)) {
-            throw new NotFoundException("Event not found with id: " + id);
+            throw new NotFoundException(ErrorMessage.Event.EVENT_NOT_FOUND + id);
         }
         eventRepository.deleteById(id);
-    }
-
-    private EventResponseDTO convertToDTO(Event event) {
-        EventResponseDTO eventResponseDTO = new EventResponseDTO();
-        eventResponseDTO.setId(event.getId());
-        eventResponseDTO.setName(event.getName());
-        eventResponseDTO.setType(event.getType());
-        eventResponseDTO.setLocation(event.getLocation());
-        eventResponseDTO.setStartDate(event.getStartDate());
-        eventResponseDTO.setEndDate(event.getEndDate());
-        eventResponseDTO.setStartTime(event.getStartTime());
-        eventResponseDTO.setEndTime(event.getEndTime());
-        return eventResponseDTO;
-    }
-
-    private Event convertToEntity(EventRequestDTO eventRequestDTO) {
-        Event event = new Event();
-        event.setName(eventRequestDTO.getName());
-        event.setType(eventRequestDTO.getType());
-        event.setLocation(eventRequestDTO.getLocation());
-        event.setStartDate(eventRequestDTO.getStartDate());
-        event.setEndDate(eventRequestDTO.getEndDate());
-        event.setStartTime(eventRequestDTO.getStartTime());
-        event.setEndTime(eventRequestDTO.getEndTime());
-        return event;
+        return !eventRepository.existsById(id);
     }
 
     private boolean isValidEventType(String type) {
-        return TYPE_CLASS.equals(type) || TYPE_ACTIVITY.equals(type) || TYPE_OFFLINE.equals(type);
+        return EventConstant.TYPE_CLASS.equals(type) || EventConstant.TYPE_ACTIVITY.equals(type) || EventConstant.TYPE_OFFLINE.equals(type);
     }
 }
