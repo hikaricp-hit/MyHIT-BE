@@ -55,4 +55,5 @@ public class Event {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "event")
     @JsonIgnore
     private Set<Member_Event> member_events = new HashSet<>();
+
 }
