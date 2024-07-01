@@ -31,4 +31,8 @@ public class ErrorMessage {
     public static final String ERR_NOT_FOUND_ID = "exception.user.not.found.id";
   }
 
+  public static class Notification {
+    public static final String ERR_NOT_FOUND_USERNAME = "exception.notification.not.found.username";
+    public static final String ERR_NOT_FOUND_ID = "exception.notification.not.found.id";
+  }
 }

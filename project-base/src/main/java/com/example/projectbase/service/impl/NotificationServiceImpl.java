@@ -1,10 +1,12 @@
 package com.example.projectbase.service.impl;
 
+import com.example.projectbase.constant.ErrorMessage;
 import com.example.projectbase.domain.dto.request.NotificationCreateDto;
 import com.example.projectbase.domain.dto.response.NotificationDto;
 import com.example.projectbase.domain.entity.Member_Notification;
 import com.example.projectbase.domain.entity.Notification;
 import com.example.projectbase.domain.mapper.NotificationMapper;
+import com.example.projectbase.exception.NotFoundException;
 import com.example.projectbase.repository.NotificationRepository;
 import com.example.projectbase.service.NotificationService;
 import lombok.RequiredArgsConstructor;
@@ -61,9 +63,8 @@ public class NotificationServiceImpl implements NotificationService {
 
     @Override
     public Notification findNotificationById(String notificationId) throws Exception {
-        return notificationRepository.findById(notificationId).orElseThrow(() ->{
-            return  new Exception("Not found");
-        });
+        return notificationRepository.findById(notificationId).orElseThrow(() ->
+                new NotFoundException(ErrorMessage.Notification.ERR_NOT_FOUND_ID, new String[]{notificationId}));
     }
 
     @Override
