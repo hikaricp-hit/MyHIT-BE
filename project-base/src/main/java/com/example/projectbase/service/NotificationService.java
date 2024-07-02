@@ -9,8 +9,8 @@ import java.util.List;
 public interface NotificationService {
     NotificationDto createGeneralNotification(NotificationCreateDto notificationCreateDto);
     NotificationDto createPersonalNotification(NotificationCreateDto notificationCreateDto, String memberId);
-    List<NotificationDto> getGeneralNotification();
-    List<NotificationDto> getPersonalNotification(String memberId);
+    List<NotificationDto> getGeneralNotification(int page, int size);
+    List<NotificationDto> getPersonalNotification(String memberId, int page, int size);
     Notification findNotificationById(String notificationId) throws Exception;
     NotificationDto updateNotification(String notificationName, NotificationCreateDto notificationCreateDto);
     void deleteNotification(String notificationName);

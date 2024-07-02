@@ -30,15 +30,15 @@ public class NotificationController {
     @Tag(name = "note-controller")
     @Operation(summary = "API get general notifications")
     @GetMapping("/notification/general")
-    public ResponseEntity<?> readGeneral() {
-        return ResponseEntity.ok().body(notificationService.getGeneralNotification());
+    public ResponseEntity<?> readGeneral(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
+        return ResponseEntity.ok().body(notificationService.getGeneralNotification(page, size));
     }
 
     @Tag(name = "note-controller")
     @Operation(summary = "API get personal notifications")
     @GetMapping("/notification/personal/{memberId}")
-    public ResponseEntity<?> readPersonal(@PathVariable String memberId) {
-        return ResponseEntity.ok().body(notificationService.getPersonalNotification(memberId));
+    public ResponseEntity<?> readPersonal(@PathVariable String memberId, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
+        return ResponseEntity.ok().body(notificationService.getPersonalNotification(memberId, page, size));
     }
 
     @Tag(name = "note-controller-admin")

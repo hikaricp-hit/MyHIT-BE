@@ -10,11 +10,16 @@ import com.example.projectbase.exception.NotFoundException;
 import com.example.projectbase.repository.NotificationRepository;
 import com.example.projectbase.service.NotificationService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -41,23 +46,22 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     @Override
-    public List<NotificationDto> getGeneralNotification() {
-        List<Notification> notifications = notificationRepository.findAllNotificationsByType("general");
-        List<NotificationDto> notificationDtos = new ArrayList<>();
-        for (Notification notification : notifications) {
-            notificationDtos.add(notificationMapper.toDto(notification));
-        }
-        return notificationDtos;
+    public List<NotificationDto> getGeneralNotification(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Notification> notesPage = notificationRepository.findAllNotificationsByType("general",pageable);
+        return notesPage.stream().map(notificationMapper::toDto).collect(Collectors.toList());
     }
 
     @Override
-    public List<NotificationDto> getPersonalNotification(String memberId) {
+    public List<NotificationDto> getPersonalNotification(String memberId, int page, int size) {
         List<Member_Notification> list= member_notificationService.findByMemberId(memberId);
         List<NotificationDto> res= new ArrayList<>();
         for(Member_Notification member_notification:list){
             Notification notification = notificationRepository.findById(member_notification.getId()).get();
             res.add(notificationMapper.toDto(notification));
         }
+        Pageable pageable = PageRequest.of(page, size);
+        Page<NotificationDto> notesPage = convertListToPage(res, pageable);
         return res;
     }
 
@@ -81,5 +85,14 @@ public class NotificationServiceImpl implements NotificationService {
     public void deleteNotification(String notificationName) {
         Optional<Notification> notification= Optional.ofNullable(notificationRepository.findNotificationByName(notificationName));
         notificationRepository.deleteById(notification.get().getId());
+    }
+
+    public static <T> Page<T> convertListToPage(List<T> list, Pageable pageable) {
+        int totalElements = list.size();
+        int start = (int) pageable.getOffset();
+        int end = Math.min((start + pageable.getPageSize()), totalElements);
+
+        List<T> subList = list.subList(start, end);
+        return new PageImpl<>(subList, pageable, totalElements);
     }
 }
