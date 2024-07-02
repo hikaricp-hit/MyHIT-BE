@@ -6,6 +6,7 @@ import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Nationalized;
 
 import javax.persistence.*;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -37,19 +38,19 @@ public class Event {
 
     @Nationalized
     @Column(nullable = false)
-    private String startDate;
+    private Date startDate;
 
     @Nationalized
     @Column(nullable = false)
-    private String endDate;
+    private Date endDate;
 
     @Nationalized
     @Column(nullable = false)
-    private String startTime;
+    private Date startTime;
 
     @Nationalized
     @Column(nullable = false)
-    private String endTime;
+    private Date endTime;
 
     //Link to table Member_Event
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "event")

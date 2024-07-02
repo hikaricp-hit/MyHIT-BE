@@ -2,6 +2,8 @@ package com.example.projectbase.domain.dto.response;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Date;
+
 @Getter
 @Setter
 public class EventResponseDTO {
@@ -12,5 +14,5 @@ public class EventResponseDTO {
     private String startDate;
     private String endDate;
     private String startTime;
-    private String endTime;
+    private Date endTime;
 }

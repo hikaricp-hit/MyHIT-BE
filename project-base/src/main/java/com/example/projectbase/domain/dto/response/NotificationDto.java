@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Date;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -12,5 +14,5 @@ import lombok.Setter;
 public class NotificationDto {
     private String name;
     private String detail;
-    private String sendDate;
+    private Date sendDate;
 }

@@ -9,6 +9,7 @@ import lombok.Setter;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
+import java.util.Date;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -22,5 +23,5 @@ public class NotificationCreateDto {
     private String detail;
 
     @NotBlank(message = ErrorMessage.INVALID_SOME_THING_FIELD_IS_REQUIRED)
-    private String sendDate;
+    private Date sendDate;
 }

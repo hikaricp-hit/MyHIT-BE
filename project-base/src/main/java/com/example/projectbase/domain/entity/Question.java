@@ -6,6 +6,7 @@ import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Nationalized;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -39,7 +40,7 @@ public class Question {
 
     @Nationalized
     @Column(nullable = false)
-    private String responseDate;
+    private Date responseDate;
 
     //Link to table Member
     @ManyToOne
