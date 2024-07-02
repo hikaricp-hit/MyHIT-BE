@@ -11,8 +11,12 @@ import com.example.projectbase.domain.mapper.EventMapper;
 import com.example.projectbase.repository.EventRepository;
 import com.example.projectbase.service.EventService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -25,18 +29,24 @@ public class EventServiceImpl implements EventService {
     private final EventMapper eventMapper = EventMapper.INSTANCE;
 
     @Override
-    public List<EventResponseDTO> getAllEvents() {
-        return eventRepository.findAll().stream().map(eventMapper::toDTO).collect(Collectors.toList());
+    public List<EventResponseDTO> getAllEvents(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Event> eventsPage = eventRepository.findAll(pageable);
+        return eventsPage.stream().map(eventMapper::toDTO).collect(Collectors.toList());
     }
 
     @Override
-    public List<EventResponseDTO> getEventsByType(String type) {
-        return eventRepository.findByType(type).stream().map(eventMapper::toDTO).collect(Collectors.toList());
+    public List<EventResponseDTO> getEventsByType(String type, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Event> eventsPage = eventRepository.findByType(type, pageable);
+        return eventsPage.stream().map(eventMapper::toDTO).collect(Collectors.toList());
     }
 
     @Override
-    public List<EventResponseDTO> getEventsByDate(String date) {
-        return eventRepository.findByDate(date).stream().map(eventMapper::toDTO).collect(Collectors.toList());
+    public List<EventResponseDTO> getEventsByDate(Date date, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Event> eventsPage = eventRepository.findByDate(date, pageable);
+        return eventsPage.stream().map(eventMapper::toDTO).collect(Collectors.toList());
     }
 
     @Override

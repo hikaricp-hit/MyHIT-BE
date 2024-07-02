@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -20,36 +21,36 @@ public class EventController {
     @Tag(name = "event - controller")
     @Operation(summary = "API get all events")
     @GetMapping("/events")
-    public List<EventResponseDTO> getAllEvents() {
-        return eventService.getAllEvents();
+    public List<EventResponseDTO> getAllEvents(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
+        return eventService.getAllEvents(page, size);
     }
 
     @Tag(name = "event - controller")
     @Operation(summary = "API get all Classes Events")
     @GetMapping("/events/class")
-    public List<EventResponseDTO> getClassEvents() {
-        return eventService.getEventsByType("Class");
+    public List<EventResponseDTO> getClassEvents(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
+        return eventService.getEventsByType("Class", page, size);
     }
 
     @Tag(name = "event - controller")
     @Operation(summary = "API get all Activity Events")
     @GetMapping("/events/activity")
-    public List<EventResponseDTO> getActivityEvents() {
-        return eventService.getEventsByType("Activity");
+    public List<EventResponseDTO> getActivityEvents(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
+        return eventService.getEventsByType("Activity", page, size);
     }
 
     @Tag(name = "event - controller")
     @Operation(summary = "API get all Offline Events")
     @GetMapping("/events/offline")
-    public List<EventResponseDTO> getOfflineEvents() {
-        return eventService.getEventsByType("Offline");
+    public List<EventResponseDTO> getOfflineEvents(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
+        return eventService.getEventsByType("Offline", page, size);
     }
 
     @Tag(name = "event - controller")
     @Operation(summary = "API get all events by date")
-    @GetMapping("/events/date/{date}")
-    public List<EventResponseDTO> getEventsByDate(@PathVariable String date) {
-        return eventService.getEventsByDate(date);
+    @GetMapping("/events/date")
+    public List<EventResponseDTO> getEventsByDate(@RequestParam Date date, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
+        return eventService.getEventsByDate(date, page, size);
     }
 
     @Tag(name = "event - controller")
