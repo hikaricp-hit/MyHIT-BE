@@ -1,6 +1,7 @@
 package com.example.projectbase.service.impl;
 
 import com.example.projectbase.constant.ErrorMessage;
+import com.example.projectbase.constant.NotificationConstrant;
 import com.example.projectbase.domain.dto.request.NotificationCreateDto;
 import com.example.projectbase.domain.dto.response.NotificationDto;
 import com.example.projectbase.domain.entity.Member_Notification;
@@ -26,12 +27,12 @@ import java.util.stream.Collectors;
 public class NotificationServiceImpl implements NotificationService {
     private final NotificationRepository notificationRepository;
     private final NotificationMapper notificationMapper;
-    private Member_NotificationServiceImpl member_notificationService;
+    private final Member_NotificationServiceImpl member_notificationService;
 
     @Override
     public NotificationDto createGeneralNotification(NotificationCreateDto notificationCreateDto) {
         Notification notification = notificationMapper.toNotification(notificationCreateDto);
-        notification.setType("general");
+        notification.setType(NotificationConstrant.TYPE_GENERAL);
         notificationRepository.save(notification);
         return notificationMapper.toDto(notification);
     }
@@ -39,7 +40,7 @@ public class NotificationServiceImpl implements NotificationService {
     @Override
     public NotificationDto createPersonalNotification(NotificationCreateDto notificationCreateDto, String memberId) {
         Notification notification = notificationMapper.toNotification(notificationCreateDto);
-        notification.setType("personal");
+        notification.setType(NotificationConstrant.TYPE_PERSONAL);
         notificationRepository.save(notification);
         member_notificationService.createConnect(notification.getId(),memberId);
         return null;
@@ -48,7 +49,7 @@ public class NotificationServiceImpl implements NotificationService {
     @Override
     public List<NotificationDto> getGeneralNotification(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
-        Page<Notification> notesPage = notificationRepository.findAllNotificationsByType("general",pageable);
+        Page<Notification> notesPage = notificationRepository.findAllNotificationsByType(NotificationConstrant.TYPE_GENERAL,pageable);
         return notesPage.stream().map(notificationMapper::toDto).collect(Collectors.toList());
     }
 

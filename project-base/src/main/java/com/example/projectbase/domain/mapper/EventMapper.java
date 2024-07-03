@@ -2,7 +2,7 @@ package com.example.projectbase.domain.mapper;
 
 import com.example.projectbase.domain.entity.Event;
 import com.example.projectbase.domain.dto.request.EventRequestDTO;
-import com.example.projectbase.domain.dto.response.EventResponseDTO;
+import com.example.projectbase.domain.dto.response.EventResponseDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
@@ -12,5 +12,5 @@ public interface EventMapper {
 
     Event toEntity(EventRequestDTO dto);
 
-    EventResponseDTO toDTO(Event entity);
+    EventResponseDto toDTO(Event entity);
 }

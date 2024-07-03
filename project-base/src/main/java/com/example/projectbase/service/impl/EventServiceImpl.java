@@ -4,7 +4,7 @@ import com.example.projectbase.constant.ErrorMessage;
 import com.example.projectbase.constant.EventConstant;
 import com.example.projectbase.domain.entity.Event;
 import com.example.projectbase.domain.dto.request.EventRequestDTO;
-import com.example.projectbase.domain.dto.response.EventResponseDTO;
+import com.example.projectbase.domain.dto.response.EventResponseDto;
 import com.example.projectbase.exception.NotFoundException;
 import com.example.projectbase.exception.InvalidException;
 import com.example.projectbase.domain.mapper.EventMapper;
@@ -29,28 +29,28 @@ public class EventServiceImpl implements EventService {
     private final EventMapper eventMapper = EventMapper.INSTANCE;
 
     @Override
-    public List<EventResponseDTO> getAllEvents(int page, int size) {
+    public List<EventResponseDto> getAllEvents(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         Page<Event> eventsPage = eventRepository.findAll(pageable);
         return eventsPage.stream().map(eventMapper::toDTO).collect(Collectors.toList());
     }
 
     @Override
-    public List<EventResponseDTO> getEventsByType(String type, int page, int size) {
+    public List<EventResponseDto> getEventsByType(String type, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         Page<Event> eventsPage = eventRepository.findByType(type, pageable);
         return eventsPage.stream().map(eventMapper::toDTO).collect(Collectors.toList());
     }
 
     @Override
-    public List<EventResponseDTO> getEventsByDate(Date date, int page, int size) {
+    public List<EventResponseDto> getEventsByDate(Date date, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         Page<Event> eventsPage = eventRepository.findByDate(date, pageable);
         return eventsPage.stream().map(eventMapper::toDTO).collect(Collectors.toList());
     }
 
     @Override
-    public EventResponseDTO getEventById(String id) {
+    public EventResponseDto getEventById(String id) {
         Optional<Event> eventOptional = eventRepository.findById(id);
         if (eventOptional.isPresent()) {
             return eventMapper.toDTO(eventOptional.get());
@@ -60,21 +60,21 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public EventResponseDTO createClassEvent(EventRequestDTO eventRequestDTO) {
+    public EventResponseDto createClassEvent(EventRequestDTO eventRequestDTO) {
         return createEventWithType(eventRequestDTO, EventConstant.TYPE_CLASS);
     }
 
     @Override
-    public EventResponseDTO createActivityEvent(EventRequestDTO eventRequestDTO) {
+    public EventResponseDto createActivityEvent(EventRequestDTO eventRequestDTO) {
         return createEventWithType(eventRequestDTO, EventConstant.TYPE_ACTIVITY);
     }
 
     @Override
-    public EventResponseDTO createOfflineEvent(EventRequestDTO eventRequestDTO) {
+    public EventResponseDto createOfflineEvent(EventRequestDTO eventRequestDTO) {
         return createEventWithType(eventRequestDTO, EventConstant.TYPE_OFFLINE);
     }
 
-    private EventResponseDTO createEventWithType(EventRequestDTO eventRequestDTO, String type) {
+    private EventResponseDto createEventWithType(EventRequestDTO eventRequestDTO, String type) {
         if (eventRequestDTO.getName() == null || eventRequestDTO.getName().isEmpty()) {
             throw new InvalidException(ErrorMessage.Event.EMPTY_EVENT_NAME);
         }
@@ -85,7 +85,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public EventResponseDTO updateEvent(String id, EventRequestDTO eventRequestDTO) {
+    public EventResponseDto updateEvent(String id, EventRequestDTO eventRequestDTO) {
         Optional<Event> optionalEvent = eventRepository.findById(id);
         if (optionalEvent.isPresent()) {
             Event event = optionalEvent.get();
