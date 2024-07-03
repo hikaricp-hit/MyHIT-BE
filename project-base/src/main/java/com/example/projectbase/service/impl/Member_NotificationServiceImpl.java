@@ -1,6 +1,7 @@
 package com.example.projectbase.service.impl;
 
 import com.example.projectbase.domain.entity.Member_Notification;
+import com.example.projectbase.domain.entity.Notification;
 import com.example.projectbase.repository.Member_NotificationRepository;
 import com.example.projectbase.service.MemberService;
 import com.example.projectbase.service.Member_NotificationService;
@@ -13,15 +14,14 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class Member_NotificationServiceImpl implements Member_NotificationService {
-    private Member_NotificationRepository member_notificationRepository;
-    private NotificationServiceImpl notificationService;
-    private MemberServiceImpl memberService;
+    private final Member_NotificationRepository member_notificationRepository;
+    private final MemberServiceImpl memberService;
 
     @Override
-    public Member_Notification createConnect(String notificationId, String memberId) {
+    public Member_Notification createConnect(Notification notification, String memberId) {
         Member_Notification connect = new Member_Notification();
         try {
-            connect.setNotification(notificationService.findNotificationById(notificationId));
+            connect.setNotification(notification);
             connect.setNotifiedMember(memberService.findMemberById(memberId));
         } catch (Exception e) {
             throw new RuntimeException(e);

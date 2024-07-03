@@ -11,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 import java.util.Date;
 import java.util.List;
 
+@Repository
 public interface EventRepository extends JpaRepository<Event, String> {
     @Query("SELECT e FROM Event e WHERE e.type = ?1")
     Page<Event> findByType(String type, Pageable pageable);
