@@ -42,7 +42,7 @@ public class NotificationServiceImpl implements NotificationService {
         Notification notification = notificationMapper.toNotification(notificationCreateDto);
         notification.setType(NotificationConstrant.TYPE_PERSONAL);
         notificationRepository.save(notification);
-        member_notificationService.createConnect(notification.getId(),memberId);
+        member_notificationService.createConnect(notification,memberId);
         return null;
     }
 
@@ -58,7 +58,7 @@ public class NotificationServiceImpl implements NotificationService {
         List<Member_Notification> list= member_notificationService.findByMemberId(memberId);
         List<NotificationDto> res= new ArrayList<>();
         for(Member_Notification member_notification:list){
-            Notification notification = notificationRepository.findById(member_notification.getId()).get();
+            Notification notification = notificationRepository.findById(member_notification.getNotification().getId()).get();
             res.add(notificationMapper.toDto(notification));
         }
         Pageable pageable = PageRequest.of(page, size);
