@@ -7,7 +7,7 @@ import java.util.Date;
 @Getter
 @Setter
 public class EventResponseDTO {
-    private String id;
+    //private String id;
     private String name;
     private String type;
     private String location;

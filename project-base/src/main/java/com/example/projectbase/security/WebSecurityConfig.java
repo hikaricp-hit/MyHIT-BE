@@ -50,6 +50,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         .authorizeRequests()
         .antMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
         .antMatchers("/api/v1/auth/**").permitAll()
+            // Đặt điều kiện phân quyền cho các API còn lại
+            .antMatchers("/api/v1/admin/**").hasRole("ADMIN")
+            .antMatchers("/api/v1/user/**").hasRole("USER")
         .anyRequest().authenticated()
         .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
     http.exceptionHandling().authenticationEntryPoint(new JwtAuthenticationEntryPoint());

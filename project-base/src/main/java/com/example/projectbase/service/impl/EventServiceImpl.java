@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 public class EventServiceImpl implements EventService {
 
     private final EventRepository eventRepository;
-    private final EventMapper eventMapper = EventMapper.INSTANCE;
+    private final EventMapper eventMapper;
 
     @Override
     public List<EventResponseDTO> getAllEvents(int page, int size) {
@@ -51,12 +51,9 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public EventResponseDTO getEventById(String id) {
-        Optional<Event> eventOptional = eventRepository.findById(id);
-        if (eventOptional.isPresent()) {
-            return eventMapper.toDTO(eventOptional.get());
-        } else {
-            throw new NotFoundException(ErrorMessage.Event.EVENT_NOT_FOUND + id);
-        }
+        Event event = eventRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException(ErrorMessage.Event.EVENT_NOT_FOUND + id));
+        return eventMapper.toDTO(event);
     }
 
     @Override
@@ -75,9 +72,7 @@ public class EventServiceImpl implements EventService {
     }
 
     private EventResponseDTO createEventWithType(EventRequestDTO eventRequestDTO, String type) {
-        if (eventRequestDTO.getName() == null || eventRequestDTO.getName().isEmpty()) {
-            throw new InvalidException(ErrorMessage.Event.EMPTY_EVENT_NAME);
-        }
+        validateEventRequest(eventRequestDTO);
         Event event = eventMapper.toEntity(eventRequestDTO);
         event.setType(type);
         Event savedEvent = eventRepository.save(event);
@@ -86,24 +81,21 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public EventResponseDTO updateEvent(String id, EventRequestDTO eventRequestDTO) {
-        Optional<Event> optionalEvent = eventRepository.findById(id);
-        if (optionalEvent.isPresent()) {
-            Event event = optionalEvent.get();
-            event.setName(eventRequestDTO.getName());
-            event.setType(eventRequestDTO.getType());
-            event.setLocation(eventRequestDTO.getLocation());
-            event.setStartDate(eventRequestDTO.getStartDate());
-            event.setEndDate(eventRequestDTO.getEndDate());
-            event.setStartTime(eventRequestDTO.getStartTime());
-            event.setEndTime(eventRequestDTO.getEndTime());
-            if (!isValidEventType(event.getType())) {
-                throw new InvalidException(ErrorMessage.Event.INVALID_EVENT_TYPE);
-            }
-            Event updatedEvent = eventRepository.save(event);
-            return eventMapper.toDTO(updatedEvent);
-        } else {
-            throw new NotFoundException(ErrorMessage.Event.EVENT_NOT_FOUND + id);
+        Event event = eventRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException(ErrorMessage.Event.EVENT_NOT_FOUND + id));
+        validateEventRequest(eventRequestDTO);
+        event.setName(eventRequestDTO.getName());
+        event.setType(eventRequestDTO.getType());
+        event.setLocation(eventRequestDTO.getLocation());
+        event.setStartDate(eventRequestDTO.getStartDate());
+        event.setEndDate(eventRequestDTO.getEndDate());
+        event.setStartTime(eventRequestDTO.getStartTime());
+        event.setEndTime(eventRequestDTO.getEndTime());
+        if (!isValidEventType(event.getType())) {
+            throw new InvalidException(ErrorMessage.Event.INVALID_EVENT_TYPE);
         }
+        Event updatedEvent = eventRepository.save(event);
+        return eventMapper.toDTO(updatedEvent);
     }
 
     @Override
@@ -115,7 +107,15 @@ public class EventServiceImpl implements EventService {
         return !eventRepository.existsById(id);
     }
 
+    private void validateEventRequest(EventRequestDTO eventRequestDTO) {
+        if (eventRequestDTO.getName() == null || eventRequestDTO.getName().isEmpty()) {
+            throw new InvalidException(ErrorMessage.Event.EMPTY_EVENT_NAME);
+        }
+    }
+
     private boolean isValidEventType(String type) {
-        return EventConstant.TYPE_CLASS.equals(type) || EventConstant.TYPE_ACTIVITY.equals(type) || EventConstant.TYPE_OFFLINE.equals(type);
+        return EventConstant.TYPE_CLASS.equals(type) ||
+                EventConstant.TYPE_ACTIVITY.equals(type) ||
+                EventConstant.TYPE_OFFLINE.equals(type);
     }
 }
