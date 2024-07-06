@@ -1,13 +1,13 @@
 package com.example.projectbase.repository;
 
-import com.example.projectbase.domain.entity.Member;
+import com.example.projectbase.domain.entity.Register;
 import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.awt.print.Pageable;
+
 @Repository
-public interface MemberRepository extends JpaRepository<Member, String> {
-    Page<Member> findAll(org.springframework.data.domain.Pageable pageable);
-    Member findMemberByid(String id);
+public interface RegisterRepository extends JpaRepository<Register, String> {
+    Page<Register> findAll(org.springframework.data.domain.Pageable pageable);
 }
