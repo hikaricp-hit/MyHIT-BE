@@ -1,6 +1,7 @@
 package com.example.projectbase.controller;
 
 import com.example.projectbase.base.VsResponseUtil;
+import com.example.projectbase.domain.dto.pagination.PaginationFullRequestDto;
 import com.example.projectbase.domain.dto.pagination.PaginationRequestDto;
 import com.example.projectbase.domain.dto.request.CourseRequestDto;
 import com.example.projectbase.service.CourseService;
@@ -25,7 +26,7 @@ public class CourseController {
     @Tag(name = "course-controller")
     @Operation(summary = "API get all courses")
     @GetMapping("/course")
-    public ResponseEntity<?> readAllCourse(@RequestBody PaginationRequestDto paginationRequestDto) {
+    public ResponseEntity<?> readAllCourse(@RequestBody PaginationFullRequestDto paginationRequestDto) {
         return VsResponseUtil.success(courseService.readAllCourse(paginationRequestDto));
     }
 

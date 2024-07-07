@@ -1,6 +1,7 @@
 package com.example.projectbase.controller;
 
 import com.example.projectbase.base.VsResponseUtil;
+import com.example.projectbase.domain.dto.pagination.PaginationFullRequestDto;
 import com.example.projectbase.domain.dto.pagination.PaginationRequestDto;
 import com.example.projectbase.domain.dto.request.RegisterRequestDto;
 import com.example.projectbase.service.RegisterService;
@@ -32,7 +33,7 @@ public class RegisterController {
     @Tag(name = "register-controller-admin")
     @Operation(summary = "API get all register")
     @GetMapping("/register")
-    public ResponseEntity<?> getAllRegister(@RequestBody PaginationRequestDto paginationRequestDto) {
+    public ResponseEntity<?> getAllRegister(@RequestBody PaginationFullRequestDto paginationRequestDto) {
         return VsResponseUtil.success(registerService.getAllRegisters(paginationRequestDto));
     }
 

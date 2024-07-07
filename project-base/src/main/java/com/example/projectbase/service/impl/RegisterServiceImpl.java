@@ -3,7 +3,10 @@ package com.example.projectbase.service.impl;
 import com.example.projectbase.constant.ErrorMessage;
 import com.example.projectbase.constant.MessageConstrant;
 import com.example.projectbase.constant.StatusConstant;
+import com.example.projectbase.domain.dto.pagination.PaginationFullRequestDto;
 import com.example.projectbase.domain.dto.pagination.PaginationRequestDto;
+import com.example.projectbase.domain.dto.pagination.PaginationResponseDto;
+import com.example.projectbase.domain.dto.pagination.PagingMeta;
 import com.example.projectbase.domain.dto.request.RegisterRequestDto;
 import com.example.projectbase.domain.dto.response.CommonResponseDto;
 import com.example.projectbase.domain.dto.response.RegisterDto;
@@ -43,11 +46,23 @@ public class RegisterServiceImpl implements RegisterService {
     }
 
     @Override
-    public List<Register> getAllRegisters(PaginationRequestDto paginationRequestDto) {
+    public PaginationResponseDto<Register> getAllRegisters(PaginationFullRequestDto paginationRequestDto) {
         Pageable pageable = PaginationUtil.buildPageable(paginationRequestDto);
+
         Page<Register> registersPage = registerRepository.findAll(pageable);
-        return registersPage.toList();
+
+        PagingMeta pagingMeta = new PagingMeta(
+                registersPage.getTotalElements(),
+                registersPage.getTotalPages(),
+                registersPage.getNumber(),
+                registersPage.getSize(),
+                paginationRequestDto.getSortBy(),
+                paginationRequestDto.getIsAscending().toString()
+        );
+
+        return new PaginationResponseDto<>(pagingMeta, registersPage.getContent());
     }
+
 
     @Override
     public List<RegisterDto> findRegistersByName(String name, PaginationRequestDto paginationRequestDto) {

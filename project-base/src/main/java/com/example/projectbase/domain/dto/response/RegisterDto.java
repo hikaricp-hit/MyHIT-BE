@@ -12,7 +12,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class RegisterDto {
-    private Member subscriber;
-    private Course course;
+    private String memberID;
+    private String courseID;
     private String status;
 }

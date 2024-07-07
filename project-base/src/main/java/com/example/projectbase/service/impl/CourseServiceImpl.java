@@ -3,7 +3,10 @@ package com.example.projectbase.service.impl;
 
 import com.example.projectbase.constant.ErrorMessage;
 import com.example.projectbase.constant.MessageConstrant;
+import com.example.projectbase.domain.dto.pagination.PaginationFullRequestDto;
 import com.example.projectbase.domain.dto.pagination.PaginationRequestDto;
+import com.example.projectbase.domain.dto.pagination.PaginationResponseDto;
+import com.example.projectbase.domain.dto.pagination.PagingMeta;
 import com.example.projectbase.domain.dto.request.CourseRequestDto;
 import com.example.projectbase.domain.dto.response.CommonResponseDto;
 import com.example.projectbase.domain.dto.response.CourseDto;
@@ -36,11 +39,27 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public List<CourseDto> readAllCourse(PaginationRequestDto paginationRequestDto) {
+    public PaginationResponseDto<CourseDto> readAllCourse(PaginationFullRequestDto paginationRequestDto) {
         Pageable pageable = PaginationUtil.buildPageable(paginationRequestDto);
+
         Page<Course> coursesPage = courseRepository.findAll(pageable);
-        return  coursesPage.stream().map(courseMapper::toDto).collect(Collectors.toList());
+
+        PagingMeta pagingMeta = new PagingMeta(
+                coursesPage.getTotalElements(),
+                coursesPage.getTotalPages(),
+                coursesPage.getNumber(),
+                coursesPage.getSize(),
+                paginationRequestDto.getSortBy(),
+                paginationRequestDto.getIsAscending().toString()
+        );
+
+        List<CourseDto> courseDtoList = coursesPage.stream()
+                .map(courseMapper::toDto)
+                .collect(Collectors.toList());
+
+        return new PaginationResponseDto<>(pagingMeta, courseDtoList);
     }
+
 
     @Override
     public List<Course> readCourse(PaginationRequestDto paginationRequestDto) {

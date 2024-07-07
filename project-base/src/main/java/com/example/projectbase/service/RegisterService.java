@@ -1,6 +1,8 @@
 package com.example.projectbase.service;
 
+import com.example.projectbase.domain.dto.pagination.PaginationFullRequestDto;
 import com.example.projectbase.domain.dto.pagination.PaginationRequestDto;
+import com.example.projectbase.domain.dto.pagination.PaginationResponseDto;
 import com.example.projectbase.domain.dto.request.RegisterRequestDto;
 import com.example.projectbase.domain.dto.response.CommonResponseDto;
 import com.example.projectbase.domain.dto.response.RegisterDto;
@@ -10,7 +12,7 @@ import java.util.List;
 
 public interface RegisterService {
     RegisterDto register(RegisterRequestDto registerRequestDto);
-    List<Register> getAllRegisters(PaginationRequestDto paginationRequestDto);
+    PaginationResponseDto<Register> getAllRegisters(PaginationFullRequestDto paginationRequestDto);
     List<RegisterDto> findRegistersByName(String name, PaginationRequestDto paginationRequestDto);
     RegisterDto acceptRegister(String id);
     RegisterDto rejectRegister(String id);
