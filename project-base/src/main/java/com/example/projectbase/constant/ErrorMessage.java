@@ -40,4 +40,14 @@ public class ErrorMessage {
     public static final String ERR_NOT_FOUND_USERNAME = "exception.notification.not.found.username";
     public static final String ERR_NOT_FOUND_ID = "exception.notification.not.found.id";
   }
+
+  public static class Course{
+    public static final String ERR_NOT_FOUND_USERNAME = "exception.course.not.found.username";
+    public static final String ERR_NOT_FOUND_ID = "exception.course.not.found.id";
+  }
+
+  public static class Register{
+    public static final String ERR_NOT_FOUND_USERNAME = "exception.register.not.found.username";
+    public static final String ERR_NOT_FOUND_ID = "exception.register.not.found.id";
+  }
 }

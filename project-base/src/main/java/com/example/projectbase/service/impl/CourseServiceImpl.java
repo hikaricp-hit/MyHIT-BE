@@ -1,12 +1,18 @@
 package com.example.projectbase.service.impl;
 
 
+import com.example.projectbase.constant.ErrorMessage;
+import com.example.projectbase.constant.MessageConstrant;
+import com.example.projectbase.domain.dto.pagination.PaginationRequestDto;
 import com.example.projectbase.domain.dto.request.CourseRequestDto;
+import com.example.projectbase.domain.dto.response.CommonResponseDto;
 import com.example.projectbase.domain.dto.response.CourseDto;
 import com.example.projectbase.domain.entity.Course;
 import com.example.projectbase.domain.mapper.CourseMapper;
+import com.example.projectbase.exception.NotFoundException;
 import com.example.projectbase.repository.CourseRepository;
 import com.example.projectbase.service.CourseService;
+import com.example.projectbase.util.PaginationUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -30,15 +36,15 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public List<CourseDto> readAllCourse(int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
+    public List<CourseDto> readAllCourse(PaginationRequestDto paginationRequestDto) {
+        Pageable pageable = PaginationUtil.buildPageable(paginationRequestDto);
         Page<Course> coursesPage = courseRepository.findAll(pageable);
         return  coursesPage.stream().map(courseMapper::toDto).collect(Collectors.toList());
     }
 
     @Override
-    public List<Course> readCourse(int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
+    public List<Course> readCourse(PaginationRequestDto paginationRequestDto) {
+        Pageable pageable = PaginationUtil.buildPageable(paginationRequestDto);
         Page<Course> coursesPage = courseRepository.findAll(pageable);
         return  coursesPage.toList();
     }
@@ -51,7 +57,8 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public CourseDto updateCourse(String courseId, CourseRequestDto courseRequestDto) {
-        Optional<Course> course = courseRepository.findById(courseId);
+        Optional<Course> course = Optional.ofNullable(courseRepository.findById(courseId).orElseThrow(() ->
+                new NotFoundException(ErrorMessage.Course.ERR_NOT_FOUND_ID, new String[]{courseId})));
         course.get().setName(courseRequestDto.getName());
         course.get().setDetail(courseRequestDto.getDetail());
         course.get().setLeader(courseRequestDto.getLeader());
@@ -62,8 +69,10 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public void deleteCourse(String courseId) {
-        Optional<Course> course = courseRepository.findById(courseId);
+    public CommonResponseDto deleteCourse(String courseId) {
+        Optional<Course> course = Optional.ofNullable(courseRepository.findById(courseId).orElseThrow(() ->
+                new NotFoundException(ErrorMessage.Course.ERR_NOT_FOUND_ID, new String[]{courseId})));
         courseRepository.deleteById(courseId);
+        return  new CommonResponseDto(true, MessageConstrant.SUCCESS);
     }
 }
