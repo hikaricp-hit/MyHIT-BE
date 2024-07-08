@@ -9,4 +9,5 @@ import java.awt.print.Pageable;
 @Repository
 public interface MemberRepository extends JpaRepository<Member, String> {
     Page<Member> findAll(org.springframework.data.domain.Pageable pageable);
+    Member findMemberByid(String id);
 }
