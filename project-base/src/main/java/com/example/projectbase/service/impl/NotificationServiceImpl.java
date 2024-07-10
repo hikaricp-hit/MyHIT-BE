@@ -1,11 +1,13 @@
 package com.example.projectbase.service.impl;
 
 import com.example.projectbase.constant.ErrorMessage;
+import com.example.projectbase.constant.MessageConstrant;
 import com.example.projectbase.constant.NotificationConstrant;
 import com.example.projectbase.domain.dto.pagination.PaginationFullRequestDto;
 import com.example.projectbase.domain.dto.pagination.PaginationResponseDto;
 import com.example.projectbase.domain.dto.pagination.PagingMeta;
 import com.example.projectbase.domain.dto.request.NotificationCreateDto;
+import com.example.projectbase.domain.dto.response.CommonResponseDto;
 import com.example.projectbase.domain.dto.response.NotificationDto;
 import com.example.projectbase.domain.entity.Member_Notification;
 import com.example.projectbase.domain.entity.Notification;
@@ -17,7 +19,6 @@ import com.example.projectbase.util.PaginationUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -95,8 +96,9 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     @Override
-    public NotificationDto updateNotification(String notificaitonName, NotificationCreateDto notificationCreateDto) {
-        Optional<Notification> notification= Optional.ofNullable(notificationRepository.findNotificationByName(notificaitonName));
+    public NotificationDto updateNotification(String notificationId, NotificationCreateDto notificationCreateDto) {
+        Optional<Notification> notification= Optional.ofNullable(notificationRepository.findById(notificationId).orElseThrow(() ->
+                new NotFoundException(ErrorMessage.Notification.ERR_NOT_FOUND_ID, new String[]{notificationId})));
         notification.get().setName(notificationCreateDto.getName());
         notification.get().setDetail(notificationCreateDto.getDetail());
         notification.get().setSendDate(notificationCreateDto.getSendDate());
@@ -105,16 +107,17 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     @Override
-    public void deleteNotification(String notificationName) {
-        Optional<Notification> notification= Optional.ofNullable(notificationRepository.findNotificationByName(notificationName));
+    public CommonResponseDto deleteNotification(String notificationId) {
+        Optional<Notification> notification= Optional.ofNullable(notificationRepository.findById(notificationId).orElseThrow(() ->
+                new NotFoundException(ErrorMessage.Notification.ERR_NOT_FOUND_ID, new String[]{notificationId})));
         notificationRepository.deleteById(notification.get().getId());
+        return  new CommonResponseDto(true, MessageConstrant.SUCCESS);
     }
 
     public static <T> Page<T> convertListToPage(List<T> list, Pageable pageable) {
         int totalElements = list.size();
         int start = (int) pageable.getOffset();
         int end = Math.min((start + pageable.getPageSize()), totalElements);
-
         List<T> subList = list.subList(start, end);
         return new PageImpl<>(subList, pageable, totalElements);
     }
