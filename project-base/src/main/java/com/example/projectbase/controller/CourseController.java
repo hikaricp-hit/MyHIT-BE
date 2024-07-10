@@ -2,7 +2,6 @@ package com.example.projectbase.controller;
 
 import com.example.projectbase.base.VsResponseUtil;
 import com.example.projectbase.domain.dto.pagination.PaginationFullRequestDto;
-import com.example.projectbase.domain.dto.pagination.PaginationRequestDto;
 import com.example.projectbase.domain.dto.request.CourseRequestDto;
 import com.example.projectbase.service.CourseService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -33,7 +32,7 @@ public class CourseController {
     @Tag(name = "course-controller-admin")
     @Operation(summary = "API get all courses for admin")
     @GetMapping("/course/admin")
-    public ResponseEntity<?> readCourse(@RequestBody PaginationRequestDto paginationRequestDto) {
+    public ResponseEntity<?> readCourse(@RequestBody PaginationFullRequestDto paginationRequestDto) {
         return VsResponseUtil.success(courseService.readCourse(paginationRequestDto));
     }
 

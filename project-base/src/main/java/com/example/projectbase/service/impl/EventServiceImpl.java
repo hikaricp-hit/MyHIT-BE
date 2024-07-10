@@ -2,6 +2,9 @@ package com.example.projectbase.service.impl;
 
 import com.example.projectbase.constant.ErrorMessage;
 import com.example.projectbase.constant.EventConstant;
+import com.example.projectbase.domain.dto.pagination.PaginationFullRequestDto;
+import com.example.projectbase.domain.dto.pagination.PaginationResponseDto;
+import com.example.projectbase.domain.dto.pagination.PagingMeta;
 import com.example.projectbase.domain.dto.response.EventResponseDto;
 import com.example.projectbase.domain.entity.Event;
 import com.example.projectbase.domain.dto.request.EventRequestDTO;
@@ -10,6 +13,7 @@ import com.example.projectbase.exception.InvalidException;
 import com.example.projectbase.domain.mapper.EventMapper;
 import com.example.projectbase.repository.EventRepository;
 import com.example.projectbase.service.EventService;
+import com.example.projectbase.util.PaginationUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -28,24 +32,51 @@ public class EventServiceImpl implements EventService {
     private final EventMapper eventMapper;
 
     @Override
-    public List<EventResponseDto> getAllEvents(int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
+    public PaginationResponseDto<EventResponseDto> getAllEvents(PaginationFullRequestDto paginationFullRequestDto) {
+        Pageable pageable = PaginationUtil.buildPageable(paginationFullRequestDto);
         Page<Event> eventsPage = eventRepository.findAll(pageable);
-        return eventsPage.stream().map(eventMapper::toDTO).collect(Collectors.toList());
+        PagingMeta pagingMeta = new PagingMeta(
+                eventsPage.getTotalElements(),
+                eventsPage.getTotalPages(),
+                eventsPage.getNumber(),
+                eventsPage.getSize(),
+                paginationFullRequestDto.getSortBy(),
+                paginationFullRequestDto.getIsAscending().toString()
+        );
+        List<EventResponseDto> eventResponseDtos= eventsPage.stream().map(eventMapper::toDTO).collect(Collectors.toList());
+        return new PaginationResponseDto<>(pagingMeta, eventResponseDtos);
     }
 
     @Override
-    public List<EventResponseDto> getEventsByType(String type, int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
+    public PaginationResponseDto<EventResponseDto> getEventsByType(String type, PaginationFullRequestDto paginationFullRequestDto) {
+        Pageable pageable = PaginationUtil.buildPageable(paginationFullRequestDto);
         Page<Event> eventsPage = eventRepository.findByType(type, pageable);
-        return eventsPage.stream().map(eventMapper::toDTO).collect(Collectors.toList());
+        PagingMeta pagingMeta = new PagingMeta(
+                eventsPage.getTotalElements(),
+                eventsPage.getTotalPages(),
+                eventsPage.getNumber(),
+                eventsPage.getSize(),
+                paginationFullRequestDto.getSortBy(),
+                paginationFullRequestDto.getIsAscending().toString()
+        );
+        List<EventResponseDto> eventResponseDtos= eventsPage.stream().map(eventMapper::toDTO).collect(Collectors.toList());
+        return new PaginationResponseDto<>(pagingMeta, eventResponseDtos);
     }
 
     @Override
-    public List<EventResponseDto> getEventsByDate(Date date, int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
+    public PaginationResponseDto<EventResponseDto> getEventsByDate(Date date, PaginationFullRequestDto paginationFullRequestDto) {
+        Pageable pageable = PaginationUtil.buildPageable(paginationFullRequestDto);
         Page<Event> eventsPage = eventRepository.findByDate(date, pageable);
-        return eventsPage.stream().map(eventMapper::toDTO).collect(Collectors.toList());
+        PagingMeta pagingMeta = new PagingMeta(
+                eventsPage.getTotalElements(),
+                eventsPage.getTotalPages(),
+                eventsPage.getNumber(),
+                eventsPage.getSize(),
+                paginationFullRequestDto.getSortBy(),
+                paginationFullRequestDto.getIsAscending().toString()
+        );
+        List<EventResponseDto> eventResponseDtos= eventsPage.stream().map(eventMapper::toDTO).collect(Collectors.toList());
+        return new PaginationResponseDto<>(pagingMeta, eventResponseDtos);
     }
 
     @Override

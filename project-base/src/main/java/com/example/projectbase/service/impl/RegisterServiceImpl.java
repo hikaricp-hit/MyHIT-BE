@@ -65,10 +65,19 @@ public class RegisterServiceImpl implements RegisterService {
 
 
     @Override
-    public List<RegisterDto> findRegistersByName(String name, PaginationRequestDto paginationRequestDto) {
+    public PaginationResponseDto<RegisterDto> findRegistersByName(String name, PaginationFullRequestDto paginationRequestDto) {
         Pageable pageable = PaginationUtil.buildPageable(paginationRequestDto);
         Page<Register> registersPage = registerRepository.findRegistersBySubscriberFullName(name, pageable);
-        return  registersPage.stream().map(registerMapper::toDto).collect(Collectors.toList());
+        PagingMeta pagingMeta = new PagingMeta(
+                registersPage.getTotalElements(),
+                registersPage.getTotalPages(),
+                registersPage.getNumber(),
+                registersPage.getSize(),
+                paginationRequestDto.getSortBy(),
+                paginationRequestDto.getIsAscending().toString()
+        );
+        List<RegisterDto> registerDtoList=  registersPage.stream().map(registerMapper::toDto).collect(Collectors.toList());
+        return new PaginationResponseDto<>(pagingMeta, registerDtoList);
     }
 
     @Override

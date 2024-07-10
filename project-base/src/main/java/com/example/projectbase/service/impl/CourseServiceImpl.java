@@ -62,10 +62,20 @@ public class CourseServiceImpl implements CourseService {
 
 
     @Override
-    public List<Course> readCourse(PaginationRequestDto paginationRequestDto) {
+    public PaginationResponseDto<Course> readCourse(PaginationFullRequestDto paginationRequestDto) {
         Pageable pageable = PaginationUtil.buildPageable(paginationRequestDto);
         Page<Course> coursesPage = courseRepository.findAll(pageable);
-        return  coursesPage.toList();
+        PagingMeta pagingMeta = new PagingMeta(
+                coursesPage.getTotalElements(),
+                coursesPage.getTotalPages(),
+                coursesPage.getNumber(),
+                coursesPage.getSize(),
+                paginationRequestDto.getSortBy(),
+                paginationRequestDto.getIsAscending().toString()
+        );
+
+        List<Course> courseList= coursesPage.toList();
+        return new PaginationResponseDto<>(pagingMeta, courseList);
     }
 
     @Override

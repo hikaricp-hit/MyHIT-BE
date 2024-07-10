@@ -4,6 +4,9 @@ import com.example.projectbase.constant.ErrorMessage;
 import com.example.projectbase.constant.MessageConstrant;
 import com.example.projectbase.constant.RoleConstant;
 import com.example.projectbase.constant.StatusConstant;
+import com.example.projectbase.domain.dto.pagination.PaginationFullRequestDto;
+import com.example.projectbase.domain.dto.pagination.PaginationResponseDto;
+import com.example.projectbase.domain.dto.pagination.PagingMeta;
 import com.example.projectbase.domain.dto.request.MemberChangePassDto;
 import com.example.projectbase.domain.dto.request.MemberCreateDto;
 import com.example.projectbase.domain.dto.request.MemberUpdateDto;
@@ -15,6 +18,7 @@ import com.example.projectbase.exception.NotFoundException;
 import com.example.projectbase.repository.MemberRepository;
 import com.example.projectbase.repository.RoleRepository;
 import com.example.projectbase.service.MemberService;
+import com.example.projectbase.util.PaginationUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -24,6 +28,8 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import static java.util.Arrays.stream;
 
 @Service
 @RequiredArgsConstructor
@@ -43,10 +49,35 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public List<MemberResponseDto> getAllMembers(int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
+    public PaginationResponseDto<MemberResponseDto> getAllMembers(PaginationFullRequestDto paginationRequestDto) {
+        Pageable pageable = PaginationUtil.buildPageable(paginationRequestDto);
         Page<Member> membersPage = memberRepository.findAll(pageable);
-        return membersPage.stream().map(memberMapper::toDto).collect(Collectors.toList());
+        PagingMeta pagingMeta = new PagingMeta(
+                membersPage.getTotalElements(),
+                membersPage.getTotalPages(),
+                membersPage.getNumber(),
+                membersPage.getSize(),
+                paginationRequestDto.getSortBy(),
+                paginationRequestDto.getIsAscending().toString()
+        );
+        List<MemberResponseDto> memberResponseDtoList= membersPage.stream().map(memberMapper::toDto).collect(Collectors.toList());
+        return new PaginationResponseDto<>(pagingMeta, memberResponseDtoList);
+    }
+
+    @Override
+    public PaginationResponseDto<Member> getAll(PaginationFullRequestDto paginationRequestDto) {
+        Pageable pageable = PaginationUtil.buildPageable(paginationRequestDto);
+        Page<Member> membersPage = memberRepository.findAll(pageable);
+        PagingMeta pagingMeta = new PagingMeta(
+                membersPage.getTotalElements(),
+                membersPage.getTotalPages(),
+                membersPage.getNumber(),
+                membersPage.getSize(),
+                paginationRequestDto.getSortBy(),
+                paginationRequestDto.getIsAscending().toString()
+        );
+        List<Member> memberList= membersPage.toList();
+        return new PaginationResponseDto<>(pagingMeta, memberList);
     }
 
     @Override
@@ -81,20 +112,15 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public void deleteMember(String memberId) {
-        Optional<Member> member= memberRepository.findById(memberId);
+    public CommonResponseDto deleteMember(String memberId) {
+        Optional<Member> member= Optional.ofNullable(memberRepository.findById(memberId).orElseThrow(() ->
+                new NotFoundException(ErrorMessage.Member.ERR_NOT_FOUND_ID, new String[]{memberId})));
         memberRepository.deleteById(memberId);
+        return  new CommonResponseDto(true, MessageConstrant.SUCCESS);
     }
 
     @Override
     public Member findMemberById(String id) throws Exception {
         return memberRepository.findById(id).orElseThrow(() ->new NotFoundException(ErrorMessage.User.ERR_NOT_FOUND_ID, new String[]{id}));
-    }
-
-    @Override
-    public List<Member> getAll(int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
-        Page<Member> membersPage = memberRepository.findAll(pageable);
-        return membersPage.toList();
     }
 }

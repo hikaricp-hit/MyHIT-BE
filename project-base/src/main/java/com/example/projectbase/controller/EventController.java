@@ -1,5 +1,7 @@
 package com.example.projectbase.controller;
 
+import com.example.projectbase.domain.dto.pagination.PaginationFullRequestDto;
+import com.example.projectbase.domain.dto.pagination.PaginationResponseDto;
 import com.example.projectbase.domain.dto.request.EventRequestDTO;
 import com.example.projectbase.domain.dto.response.EventResponseDto;
 import com.example.projectbase.service.EventService;
@@ -9,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/schedule")
@@ -21,36 +22,36 @@ public class EventController {
     @Tag(name = "event - controller")
     @Operation(summary = "API get all events")
     @GetMapping("/events")
-    public List<EventResponseDto> getAllEvents(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
-        return eventService.getAllEvents(page, size);
+    public PaginationResponseDto<EventResponseDto> getAllEvents(@RequestBody PaginationFullRequestDto paginationFullRequestDto) {
+        return eventService.getAllEvents(paginationFullRequestDto);
     }
 
     @Tag(name = "event - controller")
     @Operation(summary = "API get all Classes Events")
     @GetMapping("/events/class")
-    public List<EventResponseDto> getClassEvents(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
-        return eventService.getEventsByType("Class", page, size);
+    public PaginationResponseDto<EventResponseDto> getClassEvents(@RequestBody PaginationFullRequestDto paginationFullRequestDto) {
+        return eventService.getEventsByType("Class", paginationFullRequestDto);
     }
 
     @Tag(name = "event - controller")
     @Operation(summary = "API get all Activity Events")
     @GetMapping("/events/activity")
-    public List<EventResponseDto> getActivityEvents(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
-        return eventService.getEventsByType("Activity", page, size);
+    public PaginationResponseDto<EventResponseDto> getActivityEvents(@RequestBody PaginationFullRequestDto paginationFullRequestDto) {
+        return eventService.getEventsByType("Activity", paginationFullRequestDto);
     }
 
     @Tag(name = "event - controller")
     @Operation(summary = "API get all Offline Events")
     @GetMapping("/events/offline")
-    public List<EventResponseDto> getOfflineEvents(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
-        return eventService.getEventsByType("Offline", page, size);
+    public PaginationResponseDto<EventResponseDto> getOfflineEvents(@RequestBody PaginationFullRequestDto paginationFullRequestDto) {
+        return eventService.getEventsByType("Offline", paginationFullRequestDto);
     }
 
     @Tag(name = "event - controller")
     @Operation(summary = "API get all events by date")
     @GetMapping("/events/date")
-    public List<EventResponseDto> getEventsByDate(@RequestParam Date date, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
-        return eventService.getEventsByDate(date, page, size);
+    public PaginationResponseDto<EventResponseDto> getEventsByDate(@RequestParam Date date, @RequestBody PaginationFullRequestDto paginationFullRequestDto) {
+        return eventService.getEventsByDate(date, paginationFullRequestDto);
     }
 
     @Tag(name = "event - controller")

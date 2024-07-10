@@ -13,7 +13,7 @@ import java.util.List;
 public interface RegisterService {
     RegisterDto register(RegisterRequestDto registerRequestDto);
     PaginationResponseDto<Register> getAllRegisters(PaginationFullRequestDto paginationRequestDto);
-    List<RegisterDto> findRegistersByName(String name, PaginationRequestDto paginationRequestDto);
+    PaginationResponseDto<RegisterDto> findRegistersByName(String name, PaginationFullRequestDto paginationRequestDto);
     RegisterDto acceptRegister(String id);
     RegisterDto rejectRegister(String id);
     CommonResponseDto deleteRegister(String id);

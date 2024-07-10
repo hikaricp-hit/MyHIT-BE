@@ -50,4 +50,9 @@ public class ErrorMessage {
     public static final String ERR_NOT_FOUND_USERNAME = "exception.register.not.found.username";
     public static final String ERR_NOT_FOUND_ID = "exception.register.not.found.id";
   }
+
+  public static class Member{
+    public static final String ERR_NOT_FOUND_USERNAME = "exception.member.not.found.username";
+    public static final String ERR_NOT_FOUND_ID = "exception.member.not.found.id";
+  }
 }

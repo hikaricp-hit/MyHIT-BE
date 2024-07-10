@@ -1,5 +1,7 @@
 package com.example.projectbase.service;
 
+import com.example.projectbase.domain.dto.pagination.PaginationFullRequestDto;
+import com.example.projectbase.domain.dto.pagination.PaginationResponseDto;
 import com.example.projectbase.domain.dto.request.EventRequestDTO;
 import com.example.projectbase.domain.dto.response.EventResponseDto;
 
@@ -8,11 +10,11 @@ import java.util.List;
 
 public interface EventService {
 
-    List<EventResponseDto> getAllEvents(int page, int size);
+    PaginationResponseDto<EventResponseDto> getAllEvents(PaginationFullRequestDto paginationFullRequestDto);
 
-    List<EventResponseDto> getEventsByType(String type, int page, int size);
+    PaginationResponseDto<EventResponseDto> getEventsByType(String type, PaginationFullRequestDto paginationFullRequestDto);
 
-    List<EventResponseDto> getEventsByDate(Date date, int page, int size);
+    PaginationResponseDto<EventResponseDto> getEventsByDate(Date date, PaginationFullRequestDto paginationFullRequestDto);
 
     EventResponseDto getEventById(String id);
 
