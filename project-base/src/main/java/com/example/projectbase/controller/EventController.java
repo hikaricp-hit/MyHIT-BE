@@ -1,98 +1,80 @@
 package com.example.projectbase.controller;
 
+import com.example.projectbase.base.VsResponseUtil;
 import com.example.projectbase.domain.dto.pagination.PaginationFullRequestDto;
-import com.example.projectbase.domain.dto.pagination.PaginationResponseDto;
-import com.example.projectbase.domain.dto.request.EventRequestDTO;
-import com.example.projectbase.domain.dto.response.EventResponseDto;
+import com.example.projectbase.domain.dto.request.EventResquestDTO;
 import com.example.projectbase.service.EventService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+import org.springdoc.api.annotations.ParameterObject;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.Date;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/api/schedule")
 public class EventController {
 
-    @Autowired
-    private EventService eventService;
+    private final EventService eventService;
 
     @Tag(name = "event - controller")
     @Operation(summary = "API get all events")
     @GetMapping("/events")
-    public PaginationResponseDto<EventResponseDto> getAllEvents(@RequestBody PaginationFullRequestDto paginationFullRequestDto) {
-        return eventService.getAllEvents(paginationFullRequestDto);
+    public ResponseEntity<?> getAllEvents(@Valid @ParameterObject PaginationFullRequestDto paginationRequestDto) {
+        return VsResponseUtil.success(eventService.getAllEvents(paginationRequestDto));
     }
 
     @Tag(name = "event - controller")
-    @Operation(summary = "API get all Classes Events")
-    @GetMapping("/events/class")
-    public PaginationResponseDto<EventResponseDto> getClassEvents(@RequestBody PaginationFullRequestDto paginationFullRequestDto) {
-        return eventService.getEventsByType("Class", paginationFullRequestDto);
+    @Operation(summary = "API get events by type")
+    @GetMapping("/events/type")
+    public ResponseEntity<?> getEventsByType(@RequestParam String type) {
+        return VsResponseUtil.success(eventService.getEventsByType(type));
     }
 
     @Tag(name = "event - controller")
-    @Operation(summary = "API get all Activity Events")
-    @GetMapping("/events/activity")
-    public PaginationResponseDto<EventResponseDto> getActivityEvents(@RequestBody PaginationFullRequestDto paginationFullRequestDto) {
-        return eventService.getEventsByType("Activity", paginationFullRequestDto);
-    }
-
-    @Tag(name = "event - controller")
-    @Operation(summary = "API get all Offline Events")
-    @GetMapping("/events/offline")
-    public PaginationResponseDto<EventResponseDto> getOfflineEvents(@RequestBody PaginationFullRequestDto paginationFullRequestDto) {
-        return eventService.getEventsByType("Offline", paginationFullRequestDto);
-    }
-
-    @Tag(name = "event - controller")
-    @Operation(summary = "API get all events by date")
+    @Operation(summary = "API get events by date")
     @GetMapping("/events/date")
-    public PaginationResponseDto<EventResponseDto> getEventsByDate(@RequestParam Date date, @RequestBody PaginationFullRequestDto paginationFullRequestDto) {
-        return eventService.getEventsByDate(date, paginationFullRequestDto);
-    }
-
-    @Tag(name = "event - controller")
-    @Operation(summary = "API get event by ID")
-    @GetMapping("/events/{id}")
-    public EventResponseDto getEventById(@PathVariable String id) {
-        return eventService.getEventById(id);
+    public ResponseEntity<?> getEventsByDate(@RequestParam("date") @DateTimeFormat(pattern = "yyyy-MM-dd") Date date) {
+        return VsResponseUtil.success(eventService.getEventsByDate(date));
     }
 
     @Tag(name = "event - controller - admin")
     @Operation(summary = "API create Class event")
     @PostMapping("/events/class")
-    public EventResponseDto createClassEvent(@RequestBody EventRequestDTO eventRequestDTO) {
-        return eventService.createClassEvent(eventRequestDTO);
+    public ResponseEntity<?> createClassEvent(@RequestBody EventResquestDTO eventRequestDTO) {
+        return VsResponseUtil.success(eventService.createClassEvent(eventRequestDTO));
     }
 
     @Tag(name = "event - controller - admin")
     @Operation(summary = "API create Activity event")
     @PostMapping("/events/activity")
-    public EventResponseDto createActivityEvent(@RequestBody EventRequestDTO eventRequestDTO) {
-        return eventService.createActivityEvent(eventRequestDTO);
+    public ResponseEntity<?> createActivityEvent(@RequestBody EventResquestDTO eventRequestDTO) {
+        return VsResponseUtil.success(eventService.createActivityEvent(eventRequestDTO));
     }
 
     @Tag(name = "event - controller - admin")
     @Operation(summary = "API create Offline event")
     @PostMapping("/events/offline")
-    public EventResponseDto createOfflineEvent(@RequestBody EventRequestDTO eventRequestDTO) {
-        return eventService.createOfflineEvent(eventRequestDTO);
+    public ResponseEntity<?> createOfflineEvent(@RequestBody EventResquestDTO eventRequestDTO) {
+        return VsResponseUtil.success(eventService.createOfflineEvent(eventRequestDTO));
     }
 
     @Tag(name = "event - controller - admin")
     @Operation(summary = "API update event")
     @PutMapping("/events/{id}")
-    public EventResponseDto updateEvent(@PathVariable String id, @RequestBody EventRequestDTO eventRequestDTO) {
-        return eventService.updateEvent(id, eventRequestDTO);
+    public ResponseEntity<?> updateEvent(@PathVariable String id, @RequestBody EventResquestDTO eventRequestDTO) {
+        return VsResponseUtil.success(eventService.updateEvent(id, eventRequestDTO));
     }
 
     @Tag(name = "event - controller - admin")
     @Operation(summary = "API delete event")
     @DeleteMapping("/events/{id}")
-    public void deleteEvent(@PathVariable String id) {
-        eventService.deleteEvent(id);
+    public ResponseEntity<?> deleteEvent(@PathVariable String id) {
+        return VsResponseUtil.success(eventService.deleteEvent(id));
     }
 }
