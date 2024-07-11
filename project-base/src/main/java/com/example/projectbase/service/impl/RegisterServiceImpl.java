@@ -4,7 +4,6 @@ import com.example.projectbase.constant.ErrorMessage;
 import com.example.projectbase.constant.MessageConstrant;
 import com.example.projectbase.constant.StatusConstant;
 import com.example.projectbase.domain.dto.pagination.PaginationFullRequestDto;
-import com.example.projectbase.domain.dto.pagination.PaginationRequestDto;
 import com.example.projectbase.domain.dto.pagination.PaginationResponseDto;
 import com.example.projectbase.domain.dto.pagination.PagingMeta;
 import com.example.projectbase.domain.dto.request.RegisterRequestDto;
@@ -20,7 +19,6 @@ import com.example.projectbase.service.RegisterService;
 import com.example.projectbase.util.PaginationUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
