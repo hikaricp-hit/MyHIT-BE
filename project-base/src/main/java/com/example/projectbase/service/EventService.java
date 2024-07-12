@@ -1,28 +1,22 @@
 package com.example.projectbase.service;
 
-import com.example.projectbase.domain.dto.request.EventRequestDTO;
+import com.example.projectbase.domain.dto.pagination.PaginationFullRequestDto;
+import com.example.projectbase.domain.dto.pagination.PaginationResponseDto;
+import com.example.projectbase.domain.dto.request.EventResquestDTO;
+import com.example.projectbase.domain.dto.response.CommonResponseDto;
 import com.example.projectbase.domain.dto.response.EventResponseDto;
 
 import java.util.Date;
-import java.util.List;
 
 public interface EventService {
+    EventResponseDto createClassEvent(EventResquestDTO eventRequestDTO);
+    EventResponseDto createActivityEvent(EventResquestDTO eventRequestDTO);
+    EventResponseDto createOfflineEvent(EventResquestDTO eventRequestDTO);
 
-    List<EventResponseDto> getAllEvents(int page, int size);
+    PaginationResponseDto<EventResponseDto> getAllEvents(PaginationFullRequestDto paginationRequestDto);
+    EventResponseDto getEventsByType(String type);
+    EventResponseDto getEventsByDate(Date date);
 
-    List<EventResponseDto> getEventsByType(String type, int page, int size);
-
-    List<EventResponseDto> getEventsByDate(Date date, int page, int size);
-
-    EventResponseDto getEventById(String id);
-
-    EventResponseDto createClassEvent(EventRequestDTO eventRequestDTO);
-
-    EventResponseDto createActivityEvent(EventRequestDTO eventRequestDTO);
-
-    EventResponseDto createOfflineEvent(EventRequestDTO eventRequestDTO);
-
-    EventResponseDto updateEvent(String id, EventRequestDTO eventRequestDTO);
-
-    boolean deleteEvent(String id);
+    EventResponseDto updateEvent(String id, EventResquestDTO eventRequestDTO);
+    CommonResponseDto deleteEvent(String id);
 }

@@ -4,7 +4,6 @@ package com.example.projectbase.service.impl;
 import com.example.projectbase.constant.ErrorMessage;
 import com.example.projectbase.constant.MessageConstrant;
 import com.example.projectbase.domain.dto.pagination.PaginationFullRequestDto;
-import com.example.projectbase.domain.dto.pagination.PaginationRequestDto;
 import com.example.projectbase.domain.dto.pagination.PaginationResponseDto;
 import com.example.projectbase.domain.dto.pagination.PagingMeta;
 import com.example.projectbase.domain.dto.request.CourseRequestDto;
@@ -18,7 +17,6 @@ import com.example.projectbase.service.CourseService;
 import com.example.projectbase.util.PaginationUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -62,10 +60,20 @@ public class CourseServiceImpl implements CourseService {
 
 
     @Override
-    public List<Course> readCourse(PaginationRequestDto paginationRequestDto) {
+    public PaginationResponseDto<Course> readCourse(PaginationFullRequestDto paginationRequestDto) {
         Pageable pageable = PaginationUtil.buildPageable(paginationRequestDto);
         Page<Course> coursesPage = courseRepository.findAll(pageable);
-        return  coursesPage.toList();
+        PagingMeta pagingMeta = new PagingMeta(
+                coursesPage.getTotalElements(),
+                coursesPage.getTotalPages(),
+                coursesPage.getNumber(),
+                coursesPage.getSize(),
+                paginationRequestDto.getSortBy(),
+                paginationRequestDto.getIsAscending().toString()
+        );
+
+        List<Course> courseList= coursesPage.toList();
+        return new PaginationResponseDto<>(pagingMeta, courseList);
     }
 
     @Override

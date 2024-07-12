@@ -3,7 +3,10 @@ package com.example.projectbase.controller;
 import com.example.projectbase.base.RestApiV1;
 import com.example.projectbase.base.VsResponseUtil;
 import com.example.projectbase.constant.UrlConstant;
+import com.example.projectbase.domain.dto.request.ConfirmOtpRequestDto;
+import com.example.projectbase.domain.dto.request.ForgotPasswordRequestDto;
 import com.example.projectbase.domain.dto.request.LoginRequestDto;
+import com.example.projectbase.domain.dto.response.CommonResponseDto;
 import com.example.projectbase.service.AuthService;
 import com.example.projectbase.validator.annotation.ValidFileImage;
 import io.swagger.v3.oas.annotations.Operation;
@@ -14,7 +17,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import org.springframework.security.core.Authentication;
 
 @RequiredArgsConstructor
 @Validated
@@ -35,4 +41,21 @@ public class AuthController {
     return multipartFile.getContentType();
   }
 
+  @Operation(summary = "API Logout")
+  @PostMapping(UrlConstant.Auth.LOGOUT)
+  public ResponseEntity<?> logout(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
+    return VsResponseUtil.success(authService.logout(request, response, authentication));
+  }
+
+  @Operation(summary = "API forgotPassword")
+  @PostMapping("/forgot-password")
+  public ResponseEntity<?> forgotPassword(@Valid @RequestBody ForgotPasswordRequestDto request) {
+    return VsResponseUtil.success(authService.forgetPassword(request));
+  }
+
+  @Operation(summary = "API confirm OTP and change password")
+  @PostMapping("/confirm-otp")
+  public ResponseEntity<?> confirmOtpAndChangePassword(@Valid @RequestBody ConfirmOtpRequestDto request) {
+    return VsResponseUtil.success(authService.confirmOtpAndChangePassword(request));
+  }
 }

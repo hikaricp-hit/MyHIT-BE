@@ -1,12 +1,16 @@
 package com.example.projectbase.service;
 
+import com.example.projectbase.domain.dto.request.ConfirmOtpRequestDto;
+import com.example.projectbase.domain.dto.request.ForgotPasswordRequestDto;
 import com.example.projectbase.domain.dto.request.LoginRequestDto;
 import com.example.projectbase.domain.dto.request.TokenRefreshRequestDto;
 import com.example.projectbase.domain.dto.response.CommonResponseDto;
 import com.example.projectbase.domain.dto.response.LoginResponseDto;
 import com.example.projectbase.domain.dto.response.TokenRefreshResponseDto;
+import org.springframework.security.core.Authentication;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 public interface AuthService {
 
@@ -14,6 +18,9 @@ public interface AuthService {
 
   TokenRefreshResponseDto refresh(TokenRefreshRequestDto request);
 
-  CommonResponseDto logout(HttpServletRequest request);
+  CommonResponseDto logout(HttpServletRequest request, HttpServletResponse response, Authentication authentication);
 
+  CommonResponseDto forgetPassword(ForgotPasswordRequestDto request);
+
+  CommonResponseDto confirmOtpAndChangePassword(ConfirmOtpRequestDto request);
 }

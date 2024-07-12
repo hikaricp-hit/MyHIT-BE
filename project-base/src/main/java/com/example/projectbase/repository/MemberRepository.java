@@ -5,9 +5,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.awt.print.Pageable;
+import java.util.Optional;
+
 @Repository
 public interface MemberRepository extends JpaRepository<Member, String> {
     Page<Member> findAll(org.springframework.data.domain.Pageable pageable);
     Member findMemberByid(String id);
+    Optional<Member> findMemberByEmail(String email);
 }

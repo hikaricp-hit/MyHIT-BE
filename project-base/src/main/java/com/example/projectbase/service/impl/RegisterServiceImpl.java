@@ -4,7 +4,6 @@ import com.example.projectbase.constant.ErrorMessage;
 import com.example.projectbase.constant.MessageConstrant;
 import com.example.projectbase.constant.StatusConstant;
 import com.example.projectbase.domain.dto.pagination.PaginationFullRequestDto;
-import com.example.projectbase.domain.dto.pagination.PaginationRequestDto;
 import com.example.projectbase.domain.dto.pagination.PaginationResponseDto;
 import com.example.projectbase.domain.dto.pagination.PagingMeta;
 import com.example.projectbase.domain.dto.request.RegisterRequestDto;
@@ -20,7 +19,6 @@ import com.example.projectbase.service.RegisterService;
 import com.example.projectbase.util.PaginationUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -65,10 +63,19 @@ public class RegisterServiceImpl implements RegisterService {
 
 
     @Override
-    public List<RegisterDto> findRegistersByName(String name, PaginationRequestDto paginationRequestDto) {
+    public PaginationResponseDto<RegisterDto> findRegistersByName(String name, PaginationFullRequestDto paginationRequestDto) {
         Pageable pageable = PaginationUtil.buildPageable(paginationRequestDto);
         Page<Register> registersPage = registerRepository.findRegistersBySubscriberFullName(name, pageable);
-        return  registersPage.stream().map(registerMapper::toDto).collect(Collectors.toList());
+        PagingMeta pagingMeta = new PagingMeta(
+                registersPage.getTotalElements(),
+                registersPage.getTotalPages(),
+                registersPage.getNumber(),
+                registersPage.getSize(),
+                paginationRequestDto.getSortBy(),
+                paginationRequestDto.getIsAscending().toString()
+        );
+        List<RegisterDto> registerDtoList=  registersPage.stream().map(registerMapper::toDto).collect(Collectors.toList());
+        return new PaginationResponseDto<>(pagingMeta, registerDtoList);
     }
 
     @Override

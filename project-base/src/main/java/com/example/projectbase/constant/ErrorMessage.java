@@ -20,6 +20,9 @@ public class ErrorMessage {
   public static class Auth {
     public static final String ERR_INCORRECT_USERNAME = "exception.auth.incorrect.username";
     public static final String ERR_INCORRECT_PASSWORD = "exception.auth.incorrect.password";
+    public static final String ERR_INCORRECT_EMAIL = "exception.auth.incorrect.email";
+    public static final String ERR_INCORRECT_OTP = "exception.auth.incorrect.otp";
+    public static final String ERR_OTP_EXPIRED = "exception.auth.otp.expired";
     public static final String ERR_ACCOUNT_NOT_ENABLED = "exception.auth.account.not.enabled";
     public static final String ERR_ACCOUNT_LOCKED = "exception.auth.account.locked";
     public static final String INVALID_REFRESH_TOKEN = "exception.auth.invalid.refresh.token";
@@ -35,6 +38,7 @@ public class ErrorMessage {
     public static final String EVENT_NOT_FOUND = "Event not found with id: ";
     public static final String INVALID_EVENT_TYPE = "Invalid event type";
     public static final String EMPTY_EVENT_NAME = "Event name cannot be empty";
+    public static final String INVALID_EVENT_DATE = "Invalid event type";
   }
   public static class Notification {
     public static final String ERR_NOT_FOUND_USERNAME = "exception.notification.not.found.username";
@@ -49,5 +53,10 @@ public class ErrorMessage {
   public static class Register{
     public static final String ERR_NOT_FOUND_USERNAME = "exception.register.not.found.username";
     public static final String ERR_NOT_FOUND_ID = "exception.register.not.found.id";
+  }
+
+  public static class Member{
+    public static final String ERR_NOT_FOUND_USERNAME = "exception.member.not.found.username";
+    public static final String ERR_NOT_FOUND_ID = "exception.member.not.found.id";
   }
 }

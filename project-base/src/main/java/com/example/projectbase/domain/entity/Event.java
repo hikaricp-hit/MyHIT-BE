@@ -44,14 +44,6 @@ public class Event {
     @Column(nullable = false)
     private Date endDate;
 
-    @Nationalized
-    @Column(nullable = false)
-    private Date startTime;
-
-    @Nationalized
-    @Column(nullable = false)
-    private Date endTime;
-
     //Link to table Member_Event
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "event")
     @JsonIgnore

@@ -2,7 +2,6 @@ package com.example.projectbase.controller;
 
 import com.example.projectbase.base.VsResponseUtil;
 import com.example.projectbase.domain.dto.pagination.PaginationFullRequestDto;
-import com.example.projectbase.domain.dto.pagination.PaginationRequestDto;
 import com.example.projectbase.domain.dto.request.RegisterRequestDto;
 import com.example.projectbase.service.RegisterService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -26,7 +25,7 @@ public class RegisterController {
     @Tag(name = "register-controller")
     @Operation(summary = "API find register by subscriber's name")
     @GetMapping("/register/name")
-    public ResponseEntity<?> findRegister(@RequestParam String name, @RequestBody PaginationRequestDto paginationRequestDto) {
+    public ResponseEntity<?> findRegister(@RequestParam String name, @RequestBody PaginationFullRequestDto paginationRequestDto) {
         return VsResponseUtil.success(registerService.findRegistersByName(name, paginationRequestDto));
     }
 
