@@ -17,42 +17,42 @@ public class NotificationController {
 
     @Tag(name = "note-controller-admin")
     @Operation(summary = "API create general notification")
-    @PostMapping("/notification/general")
+    @PostMapping("/admin/notification/general")
     public ResponseEntity<?> createGeneral(@RequestBody NotificationCreateDto notificationCreateDto) {
         return VsResponseUtil.success(notificationService.createGeneralNotification(notificationCreateDto));
     }
 
     @Tag(name = "note-controller-admin")
     @Operation(summary = "API create personal notification")
-    @PostMapping("/notification/personal/{memberId}")
+    @PostMapping("/admin/notification/personal/{memberId}")
     public ResponseEntity<?> createPersonal(@RequestBody NotificationCreateDto notificationCreateDto, @PathVariable String memberId) {
         return VsResponseUtil.success(notificationService.createPersonalNotification(notificationCreateDto, memberId));
     }
 
     @Tag(name = "note-controller")
     @Operation(summary = "API get general notifications")
-    @GetMapping("/notification/general")
+    @GetMapping("/user/notification/general")
     public ResponseEntity<?> readGeneral(@RequestBody PaginationFullRequestDto paginationFullRequestDto) {
         return VsResponseUtil.success(notificationService.getGeneralNotification(paginationFullRequestDto));
     }
 
     @Tag(name = "note-controller")
     @Operation(summary = "API get personal notifications")
-    @GetMapping("/notification/personal")
+    @GetMapping("/user/notification/personal")
     public ResponseEntity<?> readPersonal(@RequestParam String memberId, @RequestBody PaginationFullRequestDto paginationFullRequestDto) {
         return VsResponseUtil.success(notificationService.getPersonalNotification(memberId, paginationFullRequestDto));
     }
 
     @Tag(name = "note-controller-admin")
     @Operation(summary = "API update notification")
-    @PutMapping("/notification/{notificationId}")
+    @PutMapping("/admin/notification/{notificationId}")
     public ResponseEntity<?> update(@PathVariable String notificationId, @RequestBody NotificationCreateDto notificationCreateDto) {
         return VsResponseUtil.success(notificationService.updateNotification(notificationId, notificationCreateDto));
     }
 
     @Tag(name = "note-controller-admin")
     @Operation(summary = "API delete notification")
-    @DeleteMapping("/notification/{notificationId}")
+    @DeleteMapping("/admin/notification/{notificationId}")
     public ResponseEntity<?> deleteNotification(@PathVariable String notificationId) {
         return VsResponseUtil.success(notificationService.deleteNotification(notificationId));
     }

@@ -46,18 +46,19 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
   @Override
   protected void configure(HttpSecurity http) throws Exception {
     http.cors().configurationSource(request -> corsConfiguration())
-        .and().csrf().disable()
-        .authorizeRequests()
-        .antMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
-        .antMatchers("/api/v1/auth/**").permitAll()
-            // Đặt điều kiện phân quyền cho các API còn lại
-            .antMatchers("/api/v1/admin/**").hasRole("ADMIN")
-            .antMatchers("/api/v1/user/**").hasRole("USER")
-        .anyRequest().authenticated()
-        .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+            .and().csrf().disable()
+            .authorizeRequests()
+            .antMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
+            .antMatchers("/api/v1/auth/**").permitAll()
+            .antMatchers("/admin/**").hasRole("ADMIN")
+            .antMatchers("/user/**").hasAnyRole("ADMIN", "USER")
+            .anyRequest().authenticated()
+            .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+
     http.exceptionHandling().authenticationEntryPoint(new JwtAuthenticationEntryPoint());
     http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
   }
+
 
   CorsConfiguration corsConfiguration() {
     CorsConfiguration corsConfiguration = new CorsConfiguration();

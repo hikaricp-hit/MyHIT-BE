@@ -7,6 +7,8 @@ public class UrlConstant {
 
     public static final String LOGIN = PRE_FIX + "/login";
     public static final String LOGOUT = PRE_FIX + "/logout";
+    public static final String FORGOT_PASSWORD = PRE_FIX + "/forgot-password";
+    public static final String CONFIRM_OTP_AND_CHAGE_PASSWORD = PRE_FIX + "/confirm-otp";
 
     private Auth() {
     }

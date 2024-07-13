@@ -17,42 +17,42 @@ public class RegisterController {
 
     @Tag(name = "register-controller")
     @Operation(summary = "API register course")
-    @PostMapping("/register")
+    @PostMapping("/user/register")
     public ResponseEntity<?> register(@RequestBody RegisterRequestDto registerRequestDto) {
         return VsResponseUtil.success(registerService.register(registerRequestDto));
     }
 
     @Tag(name = "register-controller")
     @Operation(summary = "API find register by subscriber's name")
-    @GetMapping("/register/name")
+    @GetMapping("/user/register/name")
     public ResponseEntity<?> findRegister(@RequestParam String name, @RequestBody PaginationFullRequestDto paginationRequestDto) {
         return VsResponseUtil.success(registerService.findRegistersByName(name, paginationRequestDto));
     }
 
     @Tag(name = "register-controller-admin")
     @Operation(summary = "API get all register")
-    @GetMapping("/register")
+    @GetMapping("/admin/register")
     public ResponseEntity<?> getAllRegister(@RequestBody PaginationFullRequestDto paginationRequestDto) {
         return VsResponseUtil.success(registerService.getAllRegisters(paginationRequestDto));
     }
 
     @Tag(name = "register-controller-admin")
     @Operation(summary = "API accept register")
-    @PutMapping("/register/accept")
+    @PutMapping("/admin/register/accept")
     public ResponseEntity<?> acceptRegister(@RequestParam String id) {
         return VsResponseUtil.success(registerService.acceptRegister(id));
     }
 
     @Tag(name = "register-controller-admin")
     @Operation(summary = "API reject register")
-    @PutMapping("/register/reject")
+    @PutMapping("/admin/register/reject")
     public ResponseEntity<?> rejectRegister(@RequestParam String id) {
         return VsResponseUtil.success(registerService.rejectRegister(id));
     }
 
     @Tag(name = "register-controller-admin")
     @Operation(summary = "API delete register")
-    @DeleteMapping("/register")
+    @DeleteMapping("/admin/register")
     public ResponseEntity<?> deleteCourse(@RequestParam String registerId) {
         return VsResponseUtil.success(registerService.deleteRegister(registerId));
     }
