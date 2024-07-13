@@ -7,8 +7,11 @@ import com.example.projectbase.service.CourseService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springdoc.api.annotations.ParameterObject;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @RestController
 @RequiredArgsConstructor
@@ -25,14 +28,14 @@ public class CourseController {
     @Tag(name = "course-controller")
     @Operation(summary = "API get all courses")
     @GetMapping("/user/course")
-    public ResponseEntity<?> readAllCourse(@RequestBody PaginationFullRequestDto paginationRequestDto) {
+    public ResponseEntity<?> readAllCourse(@Valid @ParameterObject PaginationFullRequestDto paginationRequestDto) {
         return VsResponseUtil.success(courseService.readAllCourse(paginationRequestDto));
     }
 
     @Tag(name = "course-controller-admin")
     @Operation(summary = "API get all courses for admin")
     @GetMapping("/admin/course/admin")
-    public ResponseEntity<?> readCourse(@RequestBody PaginationFullRequestDto paginationRequestDto) {
+    public ResponseEntity<?> readCourse(@Valid @ParameterObject PaginationFullRequestDto paginationRequestDto) {
         return VsResponseUtil.success(courseService.readCourse(paginationRequestDto));
     }
 
