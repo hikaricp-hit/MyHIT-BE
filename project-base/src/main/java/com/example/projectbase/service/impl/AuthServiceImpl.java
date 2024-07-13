@@ -21,6 +21,7 @@ import com.example.projectbase.service.AuthService;
 import com.example.projectbase.util.RandomOTPUtil;
 import com.example.projectbase.util.SendMailUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -47,14 +48,14 @@ public class AuthServiceImpl implements AuthService {
 
   private final SendMailUtil sendMailUtil;
 
-  private OtpRepository otpRepository;
+  private final OtpRepository otpRepository;
 
-  private PasswordEncoder passwordEncoder;
+  private final PasswordEncoder passwordEncoder;
   @Override
   public LoginResponseDto login(LoginRequestDto request) {
     try {
       Authentication authentication = authenticationManager.authenticate(
-          new UsernamePasswordAuthenticationToken(request.getEmailOrPhone(), request.getPassword()));
+          new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
       SecurityContextHolder.getContext().setAuthentication(authentication);
       UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
       String accessToken = jwtTokenProvider.generateToken(userPrincipal, Boolean.FALSE);

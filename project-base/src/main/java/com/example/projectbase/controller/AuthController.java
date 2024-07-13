@@ -48,13 +48,13 @@ public class AuthController {
   }
 
   @Operation(summary = "API forgotPassword")
-  @PostMapping("/forgot-password")
+  @PostMapping(UrlConstant.Auth.FORGOT_PASSWORD)
   public ResponseEntity<?> forgotPassword(@Valid @RequestBody ForgotPasswordRequestDto request) {
     return VsResponseUtil.success(authService.forgetPassword(request));
   }
 
   @Operation(summary = "API confirm OTP and change password")
-  @PostMapping("/confirm-otp")
+  @PostMapping(UrlConstant.Auth.CONFIRM_OTP_AND_CHAGE_PASSWORD)
   public ResponseEntity<?> confirmOtpAndChangePassword(@Valid @RequestBody ConfirmOtpRequestDto request) {
     return VsResponseUtil.success(authService.confirmOtpAndChangePassword(request));
   }
