@@ -22,6 +22,7 @@ import com.example.projectbase.util.PaginationUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -36,10 +37,12 @@ public class MemberServiceImpl implements MemberService {
     private final MemberRepository memberRepository;
     private final MemberMapper memberMapper;
     private final RoleRepository roleRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public MemberResponseDto createMember(MemberCreateDto memberCreateDto) {
         Member member = memberMapper.toEntity(memberCreateDto);
+        member.setPassword(passwordEncoder.encode(member.getPassword()));
         member.setNumberCourse(0);
         member.setStatus(StatusConstant.ACTIVE);
         member.setRole(roleRepository.findByRoleName(RoleConstant.USER));
