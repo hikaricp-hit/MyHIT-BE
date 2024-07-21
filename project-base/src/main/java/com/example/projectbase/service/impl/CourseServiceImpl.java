@@ -37,7 +37,7 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public PaginationResponseDto<CourseDto> readAllCourse(PaginationFullRequestDto paginationRequestDto) {
+    public PaginationResponseDto<Course> readAllCourse(PaginationFullRequestDto paginationRequestDto) {
         Pageable pageable = PaginationUtil.buildPageable(paginationRequestDto);
 
         Page<Course> coursesPage = courseRepository.findAll(pageable);
@@ -51,11 +51,9 @@ public class CourseServiceImpl implements CourseService {
                 paginationRequestDto.getIsAscending().toString()
         );
 
-        List<CourseDto> courseDtoList = coursesPage.stream()
-                .map(courseMapper::toDto)
-                .collect(Collectors.toList());
+        List<Course> courseList= coursesPage.toList();
 
-        return new PaginationResponseDto<>(pagingMeta, courseDtoList);
+        return new PaginationResponseDto<>(pagingMeta, courseList);
     }
 
 
