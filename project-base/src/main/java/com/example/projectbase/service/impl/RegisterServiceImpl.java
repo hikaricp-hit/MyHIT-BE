@@ -3,12 +3,15 @@ package com.example.projectbase.service.impl;
 import com.example.projectbase.constant.ErrorMessage;
 import com.example.projectbase.constant.MessageConstrant;
 import com.example.projectbase.constant.StatusConstant;
+import com.example.projectbase.constant.ValidationErrorMessages;
 import com.example.projectbase.domain.dto.pagination.PaginationFullRequestDto;
 import com.example.projectbase.domain.dto.pagination.PaginationResponseDto;
 import com.example.projectbase.domain.dto.pagination.PagingMeta;
 import com.example.projectbase.domain.dto.request.RegisterRequestDto;
 import com.example.projectbase.domain.dto.response.CommonResponseDto;
 import com.example.projectbase.domain.dto.response.RegisterDto;
+import com.example.projectbase.domain.entity.Course;
+import com.example.projectbase.domain.entity.Member;
 import com.example.projectbase.domain.entity.Register;
 import com.example.projectbase.domain.mapper.RegisterMapper;
 import com.example.projectbase.exception.NotFoundException;
@@ -22,6 +25,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import javax.validation.ValidationException;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -36,12 +40,29 @@ public class RegisterServiceImpl implements RegisterService {
 
     @Override
     public RegisterDto register(RegisterRequestDto registerRequestDto) {
+        Member member = memberRepository.findById(registerRequestDto.getSubscriberId())
+                .orElseThrow(() -> new NotFoundException(ErrorMessage.Member.ERR_NOT_FOUND_ID));
+
+        Course course = courseRepository.findById(registerRequestDto.getCourseId())
+                .orElseThrow(() -> new NotFoundException(ErrorMessage.Course.ERR_NOT_FOUND_ID));
+
+        if (registerRepository.existsBySubscriberAndCourse(registerRequestDto.getSubscriberId(), registerRequestDto.getCourseId())) {
+            throw new ValidationException(ValidationErrorMessages.COURSE_ALREADY_REGISTERED);
+        }
+
+        long registeredCoursesCount = registerRepository.countBySubscriber(member);
+        if (registeredCoursesCount >= 2) {
+            throw new ValidationException(ValidationErrorMessages.MAX_COURSES_REGISTERED);
+        }
+
         Register register = new Register();
-        register.setSubscriber(memberRepository.findMemberByid(registerRequestDto.getSubscriberId()));
-        register.setCourse(courseRepository.findCourseById(registerRequestDto.getCourseId()));
+        register.setSubscriber(member);
+        register.setCourse(course);
         register.setStatus(StatusConstant.registerStatus.pending);
+
         return registerMapper.toDto(registerRepository.save(register));
     }
+
 
     @Override
     public PaginationResponseDto<Register> getAllRegisters(PaginationFullRequestDto paginationRequestDto) {

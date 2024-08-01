@@ -3,15 +3,19 @@ package com.example.projectbase.controller;
 import com.example.projectbase.base.VsResponseUtil;
 import com.example.projectbase.domain.dto.pagination.PaginationFullRequestDto;
 import com.example.projectbase.domain.dto.request.RegisterRequestDto;
+import com.example.projectbase.domain.dto.response.RegisterDto;
+import com.example.projectbase.exception.NotFoundException;
 import com.example.projectbase.service.RegisterService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springdoc.api.annotations.ParameterObject;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.validation.ValidationException;
 
 @RestController
 @RequiredArgsConstructor
@@ -22,8 +26,19 @@ public class RegisterController {
     @Operation(summary = "API register course")
     @PostMapping("/user/register")
     public ResponseEntity<?> register(@RequestBody RegisterRequestDto registerRequestDto) {
-        return VsResponseUtil.success(registerService.register(registerRequestDto));
+        try {
+            RegisterDto registerDto = registerService.register(registerRequestDto);
+            return VsResponseUtil.success(registerDto);
+        } catch (ValidationException ex) {
+            return VsResponseUtil.error(ex.getMessage(), HttpStatus.BAD_REQUEST);
+        } catch (NotFoundException ex) {
+            return VsResponseUtil.error(ex.getMessage(), HttpStatus.NOT_FOUND);
+        } catch (Exception ex) {
+            return VsResponseUtil.error("An unexpected error occurred.", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
+
+
 
     @Tag(name = "register-controller")
     @Operation(summary = "API find register by subscriber's name")

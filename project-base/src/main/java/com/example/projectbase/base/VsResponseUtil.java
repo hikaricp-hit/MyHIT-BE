@@ -1,5 +1,6 @@
 package com.example.projectbase.base;
 
+import com.example.projectbase.domain.dto.response.ApiResponse;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -9,6 +10,14 @@ public class VsResponseUtil {
 
   public static ResponseEntity<RestData<?>> success(Object data) {
     return success(HttpStatus.OK, data);
+  }
+
+  public static ResponseEntity<?> success(Object data, String message) {
+    return ResponseEntity.ok(new ApiResponse(true, message, data));
+  }
+
+  public static ResponseEntity<?> error(String message, HttpStatus status) {
+    return ResponseEntity.status(status).body(new ApiResponse(false, message, null));
   }
 
   public static ResponseEntity<RestData<?>> success(HttpStatus status, Object data) {
