@@ -74,4 +74,13 @@ public class RegisterController {
     public ResponseEntity<?> deleteCourse(@RequestParam String registerId) {
         return VsResponseUtil.success(registerService.deleteRegister(registerId));
     }
+
+
+    @Tag(name = "register-controller-user")
+    @Operation(summary = "API user cancel register")
+    @DeleteMapping("/user/cancel-register")
+    public ResponseEntity<?> cancelRegister(@RequestParam String registerId, @RequestParam String memberId) {
+        return VsResponseUtil.success(registerService.cancelRegister(registerId, memberId));
+    }
+
 }

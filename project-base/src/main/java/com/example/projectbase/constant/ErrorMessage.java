@@ -53,6 +53,7 @@ public class ErrorMessage {
   public static class Register{
     public static final String ERR_NOT_FOUND_USERNAME = "exception.register.not.found.username";
     public static final String ERR_NOT_FOUND_ID = "exception.register.not.found.id";
+    public static final String ERR_UNAUTHORIZED_CANCEL = "exception.register.unauthorized.cancel";
   }
 
   public static class Member{

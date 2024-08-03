@@ -15,6 +15,7 @@ import com.example.projectbase.domain.entity.Member;
 import com.example.projectbase.domain.entity.Register;
 import com.example.projectbase.domain.mapper.RegisterMapper;
 import com.example.projectbase.exception.NotFoundException;
+import com.example.projectbase.exception.UnauthorizedException;
 import com.example.projectbase.repository.CourseRepository;
 import com.example.projectbase.repository.MemberRepository;
 import com.example.projectbase.repository.RegisterRepository;
@@ -118,4 +119,19 @@ public class RegisterServiceImpl implements RegisterService {
         registerRepository.deleteById(id);
         return  new CommonResponseDto(true, MessageConstrant.SUCCESS);
     }
+
+    @Override
+    public CommonResponseDto cancelRegister(String registerId, String memberId) {
+        Register register = registerRepository.findById(registerId)
+                .orElseThrow(() -> new NotFoundException(ErrorMessage.Register.ERR_NOT_FOUND_ID));
+
+        if (!register.getSubscriber().getId().equals(memberId)) {
+            throw new RuntimeException(ErrorMessage.Register.ERR_UNAUTHORIZED_CANCEL);
+        }
+
+        registerRepository.deleteById(registerId);
+        return new CommonResponseDto(true, MessageConstrant.SUCCESS);
+    }
+
+
 }
