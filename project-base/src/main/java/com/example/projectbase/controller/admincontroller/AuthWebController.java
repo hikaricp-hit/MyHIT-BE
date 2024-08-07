@@ -28,7 +28,7 @@ public class AuthWebController {
 
     @GetMapping("/login")
     public ModelAndView login() {
-        ModelAndView modelAndView = new ModelAndView("login");
+        ModelAndView modelAndView = new ModelAndView("pages-login");
         return modelAndView;
     }
 
