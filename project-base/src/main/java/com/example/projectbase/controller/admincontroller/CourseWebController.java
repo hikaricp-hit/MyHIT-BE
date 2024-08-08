@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 public class CourseWebController {
-    @GetMapping("/admin/web/course")
+    @GetMapping("/auth/course")
     public String success() {
         return "pages-course";
     }
