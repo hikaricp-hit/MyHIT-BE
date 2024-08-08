@@ -55,6 +55,6 @@ public class AuthWebController {
     public String logout(HttpServletRequest request, HttpServletResponse response) {
         SecurityContextHolder.clearContext();
         response.addHeader("Authorization", "");
-        return "redirect:/";
+        return "redirect:/login";
     }
 }
