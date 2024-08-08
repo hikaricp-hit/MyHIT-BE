@@ -2,7 +2,7 @@ package com.example.projectbase.controller;
 
 import com.example.projectbase.base.VsResponseUtil;
 import com.example.projectbase.domain.dto.pagination.PaginationFullRequestDto;
-import com.example.projectbase.domain.dto.request.MemberChangePassDto;
+import com.example.projectbase.domain.dto.request.MemberChangePassRequestDto;
 import com.example.projectbase.domain.dto.request.MemberCreateDto;
 import com.example.projectbase.domain.dto.request.MemberUpdateDto;
 import com.example.projectbase.service.MemberService;
@@ -57,7 +57,7 @@ public class MemberController {
     @Tag(name = "member-controller")
     @Operation(summary = "API change password")
     @PutMapping("/user/member/changePassword")
-    public ResponseEntity<?> changePassword(@RequestBody MemberChangePassDto memberChangePassDto) {
+    public ResponseEntity<?> changePassword(@RequestBody MemberChangePassRequestDto memberChangePassDto) {
         return VsResponseUtil.success(memberService.changePassword(memberChangePassDto));
     }
 

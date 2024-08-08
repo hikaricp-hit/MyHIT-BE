@@ -7,7 +7,7 @@ import com.example.projectbase.constant.StatusConstant;
 import com.example.projectbase.domain.dto.pagination.PaginationFullRequestDto;
 import com.example.projectbase.domain.dto.pagination.PaginationResponseDto;
 import com.example.projectbase.domain.dto.pagination.PagingMeta;
-import com.example.projectbase.domain.dto.request.MemberChangePassDto;
+import com.example.projectbase.domain.dto.request.MemberChangePassRequestDto;
 import com.example.projectbase.domain.dto.request.MemberCreateDto;
 import com.example.projectbase.domain.dto.request.MemberUpdateDto;
 import com.example.projectbase.domain.dto.response.CommonResponseDto;
@@ -22,6 +22,7 @@ import com.example.projectbase.util.PaginationUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -101,17 +102,27 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public CommonResponseDto changePassword(MemberChangePassDto memberChangePassDto) {
-        Optional<Member> member= memberRepository.findById(memberChangePassDto.getMemberId());
-        if(member.get().getPassword().equals(memberChangePassDto.getOldPassword())){
-            member.get().setPassword(memberChangePassDto.getNewPassword());
-            memberRepository.save(member.get());
-            return new CommonResponseDto(true, MessageConstrant.SUCCESS);
+    public CommonResponseDto changePassword(MemberChangePassRequestDto memberChangePassDto) {
+        Optional<Member> optionalMember = memberRepository.findById(memberChangePassDto.getMemberId());
+
+        if (!optionalMember.isPresent()) {
+            return new CommonResponseDto(false, "Member not found");
         }
-        else {
-            return new CommonResponseDto(false, MessageConstrant.FAIL);
+
+        Member member = optionalMember.get();
+
+        // Kiểm tra mật khẩu cũ
+        if (!passwordEncoder.matches(memberChangePassDto.getOldPassword(), member.getPassword())) {
+            return new CommonResponseDto(false, "Old password is incorrect");
         }
+
+        // Cập nhật mật khẩu
+        member.setPassword(passwordEncoder.encode(memberChangePassDto.getNewPassword()));
+        memberRepository.save(member);
+
+        return new CommonResponseDto(true, "Password changed successfully");
     }
+
 
     @Override
     public CommonResponseDto deleteMember(String memberId) {
