@@ -13,7 +13,7 @@ import javax.validation.constraints.Pattern;
 @NoArgsConstructor
 @Getter
 @Setter
-public class MemberChangePassDto {
+public class MemberChangePassRequestDto {
     @NotNull(message = ErrorMessage.INVALID_SOME_THING_FIELD_IS_REQUIRED)
     private String memberId;
 

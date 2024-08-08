@@ -128,7 +128,6 @@ public class RegisterServiceImpl implements RegisterService {
         if (!register.getSubscriber().getId().equals(memberId)) {
             throw new RuntimeException(ErrorMessage.Register.ERR_UNAUTHORIZED_CANCEL);
         }
-
         registerRepository.deleteById(registerId);
         return new CommonResponseDto(true, MessageConstrant.SUCCESS);
     }

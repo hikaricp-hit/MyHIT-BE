@@ -52,7 +52,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .antMatchers("/api/v1/auth/**").permitAll()
             .antMatchers("/admin/**").hasRole("ADMIN")
             .antMatchers("/user/**").hasAnyRole("ADMIN", "USER")
-            .anyRequest().authenticated()
+            .anyRequest().permitAll()
             .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
     http.exceptionHandling().authenticationEntryPoint(new JwtAuthenticationEntryPoint());
