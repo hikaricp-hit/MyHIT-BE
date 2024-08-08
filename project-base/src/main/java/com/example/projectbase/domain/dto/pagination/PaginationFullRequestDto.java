@@ -16,6 +16,9 @@ public class PaginationFullRequestDto extends PaginationSortRequestDto {
   @Parameter(description = "Keyword to search")
   private String keyword = CommonConstant.EMPTY_STRING;
 
+  public PaginationFullRequestDto(String s, String s1, boolean b, int i, int i1) {
+  }
+
   public String getKeyword() {
     return keyword.trim();
   }
