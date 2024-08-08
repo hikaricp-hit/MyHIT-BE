@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 public class RegisterWebController {
-    @GetMapping("/auth/register")
+    @GetMapping("/admin/web/register")
     public String success() {
         return "pages-register";
     }

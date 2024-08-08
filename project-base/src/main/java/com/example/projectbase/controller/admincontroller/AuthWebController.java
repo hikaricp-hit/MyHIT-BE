@@ -43,10 +43,10 @@ public class AuthWebController {
         String accessToken = jwtTokenProvider.generateToken(userPrincipal, Boolean.FALSE);
 //        request.getSession().setAttribute("accessToken", accessToken);
         response.addHeader("Authorization", "Bearer " + accessToken);
-        return new ModelAndView("redirect:/auth/home");
+        return new ModelAndView("redirect:/admin/web/home");
     }
 
-    @GetMapping("/auth/home")
+    @GetMapping("/admin/web/home")
     public String success() {
         return "index";
     }

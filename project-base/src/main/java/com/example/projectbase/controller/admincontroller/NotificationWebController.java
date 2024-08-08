@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 public class NotificationWebController {
-    @GetMapping("/auth/notification")
+    @GetMapping("/admin/web/notification")
     public String success() {
         return "pages-notification";
     }
