@@ -29,20 +29,14 @@ public class RegisterWebController {
         return new ModelAndView("pages-register");
     }
 
-    @PostMapping("/accept")
-    public ModelAndView accept(@RequestParam String acceptRegisterId, Model model) {
-        registerService.acceptRegister(acceptRegisterId);
+    @PostMapping("/respond")
+    public ModelAndView accept(@RequestParam String respond, @RequestParam String registerId, Model model) {
+        if(respond.equals("Accept"))
+            registerService.acceptRegister(registerId);
+        else
+            registerService.rejectRegister(registerId);
         List<Register> list= registerService.getAll();
-        model.addAttribute("respone", "Register accepted!");
-        model.addAttribute("list", list);
-        return new ModelAndView("pages-register");
-    }
-
-    @PostMapping("/reject")
-    public ModelAndView reject(@RequestParam String rejectRegisterId, Model model) {
-        registerService.rejectRegister(rejectRegisterId);
-        List<Register> list= registerService.getAll();
-        model.addAttribute("respone", "Register was rejected!");
+        model.addAttribute("respone", "Respond successfully!");
         model.addAttribute("list", list);
         return new ModelAndView("pages-register");
     }

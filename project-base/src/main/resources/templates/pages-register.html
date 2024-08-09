@@ -327,7 +327,7 @@
               <li>
                 <a class="dropdown-item d-flex align-items-center" href="#" onclick="document.getElementById('logout-form').submit();">
                   <form id="logout-form" action="/auth/logout" method="post" style="display:none;"></form>
-                  <i class="bi bi-box-arrow-right"></i>
+                  <i class="bi bi-box-arrow-right"></i>thì
                   <span>Sign Out</span>
                 </a>
               </li>
@@ -458,8 +458,8 @@
                       <tbody>
                       <tr th:each="a:${list}">
                         <td th:text="*{a.getId()}"></td>
-                        <td th:text="*{a.getSubscriber()}"></td>
-                        <td th:text="*{a.getCourse()}"></td>
+                        <td th:text="*{a.getSubscriber().getFullName()}"></td>
+                        <td th:text="*{a.getCourse().getName()}"></td>
                         <td th:text="*{a.getStatus()}"></td>
                       </tr>
                       </tbody>
@@ -503,27 +503,32 @@
                   <div class="tab-pane fade pt-3" id="profile-settings">
                     <!-- Respond Register -->
                     <!-- General Form Elements -->
-                    <form>
+                    <form th:action="@{/auth/register/respond}" th:method="post">
                       <div class="row mb-3">
-                        <label class="col-sm-2 col-form-label"
-                          >Register ID</label
-                        >
+                        <label class="col-sm-2 col-form-label">Register ID</label>
                         <div class="col-sm-10">
-                          <input type="text" class="form-control" />
+                          <input id="registerId" name="registerId" type="text" class="form-control" />
+                        </div>
+                      </div>
+                      <div class="row mb-3">
+                        <label class="col-sm-2 col-form-label">Type</label>
+                        <div class="col-sm-10">
+                          <select
+                                  id="respond"
+                                  name="respond"
+                                  class="form-select"
+                                  aria-label="Default select example"
+                          >
+                            <option selected value="Accept">Accept</option>
+                            <option value="Reject">Reject</option>
+                          </select>
                         </div>
                       </div>
 
-                      <div class="row mb-3">
-                        <div class="col-sm-6" style="display: flex; justify-content: center; align-items: center;">
-                          <button type="submit" class="btn btn-primary" style="background-color:forestgreen;">
-                            Accept
-                          </button>
-                        </div>
-                        <div class="col-sm-6" style="display: flex; justify-content: center; align-items: center;">
-                          <button type="submit" class="btn btn-primary" style="background-color: crimson;">
-                            Reject
-                          </button>
-                        </div>
+                      <div class="row mb-3" style="display: flex; justify-content: center; align-items: center;">
+                        <button type="submit" class="btn btn-primary" style="width: max-content;">
+                          Submit
+                        </button>
                       </div>
                     </form>
                     <!-- End General Form Elements -->
