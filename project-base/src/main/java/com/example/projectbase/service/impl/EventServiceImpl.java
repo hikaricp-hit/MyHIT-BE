@@ -9,6 +9,7 @@ import com.example.projectbase.domain.dto.request.EventResquestDTO;
 import com.example.projectbase.domain.dto.response.CommonResponseDto;
 import com.example.projectbase.domain.dto.response.EventResponseDto;
 import com.example.projectbase.domain.entity.Event;
+import com.example.projectbase.domain.entity.Member;
 import com.example.projectbase.domain.mapper.EventMapper;
 import com.example.projectbase.exception.NotFoundException;
 import com.example.projectbase.repository.EventRepository;
@@ -76,6 +77,22 @@ public class EventServiceImpl implements EventService {
                 .collect(Collectors.toList());
 
         return new PaginationResponseDto<>(pagingMeta, eventsDtoList);
+    }
+
+    @Override
+    public PaginationResponseDto<Event> getAllEvent(PaginationFullRequestDto paginationRequestDto) {
+        Pageable pageable = PaginationUtil.buildPageable(paginationRequestDto);
+        Page<Event> events = eventRepository.findAll(pageable);
+        PagingMeta pagingMeta = new PagingMeta(
+                events.getTotalElements(),
+                events.getTotalPages(),
+                events.getNumber(),
+                events.getSize(),
+                paginationRequestDto.getSortBy(),
+                paginationRequestDto.getIsAscending().toString()
+        );
+        List<Event> eventList= events.toList();
+        return new PaginationResponseDto<>(pagingMeta, eventList);
     }
 
     public EventResponseDto getEventsByType(String type) {
