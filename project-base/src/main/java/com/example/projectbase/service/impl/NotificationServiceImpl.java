@@ -52,6 +52,12 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     @Override
+    public List<Notification> getAll() {
+        List<Notification> notifications = notificationRepository.findAll();
+        return notifications;
+    }
+
+    @Override
     public PaginationResponseDto<NotificationDto> getGeneralNotification(PaginationFullRequestDto paginationRequestDto) {
         Pageable pageable = PaginationUtil.buildPageable(paginationRequestDto);
         Page<Notification> notesPage = notificationRepository.findAllNotificationsByType(NotificationConstrant.TYPE_GENERAL,pageable);
