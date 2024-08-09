@@ -16,6 +16,7 @@ import org.springframework.web.servlet.ModelAndView;
 public class MemberWebController {
     @Autowired
     MemberService memberService;
+
     @GetMapping("")
     public ModelAndView success(Model model) {
         PaginationResponseDto<Member> list = memberService.getAll( new PaginationFullRequestDto("","",true,0,1000));

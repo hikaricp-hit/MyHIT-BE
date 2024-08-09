@@ -111,12 +111,10 @@ public class MemberServiceImpl implements MemberService {
 
         Member member = optionalMember.get();
 
-        // Kiểm tra mật khẩu cũ
         if (!passwordEncoder.matches(memberChangePassDto.getOldPassword(), member.getPassword())) {
             return new CommonResponseDto(false, "Old password is incorrect");
         }
 
-        // Cập nhật mật khẩu
         member.setPassword(passwordEncoder.encode(memberChangePassDto.getNewPassword()));
         memberRepository.save(member);
 
