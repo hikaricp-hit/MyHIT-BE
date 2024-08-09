@@ -42,6 +42,11 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
+    public List<Event> getAll() {
+        return eventRepository.findAll();
+    }
+
+    @Override
     public EventResponseDto createActivityEvent(EventResquestDTO eventRequestDTO) {
         Event event = eventMapper.toEntity(eventRequestDTO);
         event.setType("Activity");

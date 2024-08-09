@@ -22,4 +22,5 @@ public interface EventService {
     EventResponseDto updateEvent(String id, EventResquestDTO eventRequestDTO);
     CommonResponseDto deleteEvent(String id);
     PaginationResponseDto<Event> getAllEvent(PaginationFullRequestDto paginationFullRequestDto);
+    List<Event> getAll();
 }

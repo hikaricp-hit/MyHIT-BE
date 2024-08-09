@@ -18,4 +18,5 @@ public interface RegisterService {
     RegisterDto rejectRegister(String id);
     CommonResponseDto deleteRegister(String id);
     CommonResponseDto cancelRegister(String registerId, String memberId);
+    List<Register> getAll();
 }
