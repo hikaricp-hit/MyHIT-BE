@@ -10,6 +10,7 @@ import com.example.projectbase.domain.dto.request.CourseRequestDto;
 import com.example.projectbase.domain.dto.response.CommonResponseDto;
 import com.example.projectbase.domain.dto.response.CourseDto;
 import com.example.projectbase.domain.entity.Course;
+import com.example.projectbase.domain.entity.Notification;
 import com.example.projectbase.domain.mapper.CourseMapper;
 import com.example.projectbase.exception.NotFoundException;
 import com.example.projectbase.repository.CourseRepository;
@@ -34,6 +35,12 @@ public class CourseServiceImpl implements CourseService {
     public CourseDto createCourse(CourseRequestDto courseRequestDto) {
         Course course = courseMapper.toEntity(courseRequestDto);
         return courseMapper.toDto(courseRepository.save(course));
+    }
+
+    @Override
+    public List<Course> getAll() {
+        List<Course> courses = courseRepository.findAll();
+        return courses;
     }
 
     @Override

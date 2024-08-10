@@ -12,6 +12,7 @@ import com.example.projectbase.domain.dto.request.MemberCreateDto;
 import com.example.projectbase.domain.dto.request.MemberUpdateDto;
 import com.example.projectbase.domain.dto.response.CommonResponseDto;
 import com.example.projectbase.domain.dto.response.MemberResponseDto;
+import com.example.projectbase.domain.entity.Course;
 import com.example.projectbase.domain.entity.Member;
 import com.example.projectbase.domain.mapper.MemberMapper;
 import com.example.projectbase.exception.NotFoundException;
@@ -49,6 +50,12 @@ public class MemberServiceImpl implements MemberService {
         member.setRole(roleRepository.findByRoleName(RoleConstant.USER));
         memberRepository.save(member);
         return memberMapper.toDto(member);
+    }
+
+    @Override
+    public List<Member> getAlls() {
+        List<Member> members = memberRepository.findAll();
+        return members;
     }
 
     @Override
@@ -111,12 +118,10 @@ public class MemberServiceImpl implements MemberService {
 
         Member member = optionalMember.get();
 
-        // Kiểm tra mật khẩu cũ
         if (!passwordEncoder.matches(memberChangePassDto.getOldPassword(), member.getPassword())) {
             return new CommonResponseDto(false, "Old password is incorrect");
         }
 
-        // Cập nhật mật khẩu
         member.setPassword(passwordEncoder.encode(memberChangePassDto.getNewPassword()));
         memberRepository.save(member);
 

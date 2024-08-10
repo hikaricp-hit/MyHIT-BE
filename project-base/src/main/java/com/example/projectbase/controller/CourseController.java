@@ -18,12 +18,12 @@ import javax.validation.Valid;
 public class CourseController {
     private final CourseService courseService;
 
-    @Tag(name = "course-controller-admin")
-    @Operation(summary = "API create course")
-    @PostMapping("/admin/course")
-    public ResponseEntity<?> createCourse(@RequestBody CourseRequestDto courseRequestDto) {
-        return VsResponseUtil.success(courseService.createCourse(courseRequestDto));
-    }
+//    @Tag(name = "course-controller-admin")
+//    @Operation(summary = "API create course")
+//    @PostMapping("/admin/course")
+//    public ResponseEntity<?> createCourse(@RequestBody CourseRequestDto courseRequestDto) {
+//        return VsResponseUtil.success(courseService.createCourse(courseRequestDto));
+//    }
 
     @Tag(name = "course-controller")
     @Operation(summary = "API get all courses")

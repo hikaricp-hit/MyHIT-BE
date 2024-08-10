@@ -10,12 +10,13 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
+//@RequestMapping("/web-admin")
 @Controller
 public class AuthWebController {
     private final AuthenticationManager authenticationManager;
@@ -26,7 +27,7 @@ public class AuthWebController {
         this.jwtTokenProvider = jwtTokenProvider;
     }
 
-    @GetMapping("/login")
+    @GetMapping("/auth/login")
     public ModelAndView login() {
         ModelAndView modelAndView = new ModelAndView("pages-login");
         return modelAndView;
@@ -41,7 +42,7 @@ public class AuthWebController {
         SecurityContextHolder.getContext().setAuthentication(authentication);
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
         String accessToken = jwtTokenProvider.generateToken(userPrincipal, Boolean.FALSE);
-//        request.getSession().setAttribute("accessToken", accessToken);
+        request.getSession().setAttribute("accessToken", accessToken);
         response.addHeader("Authorization", "Bearer " + accessToken);
         return new ModelAndView("redirect:/auth/home");
     }
@@ -55,6 +56,6 @@ public class AuthWebController {
     public String logout(HttpServletRequest request, HttpServletResponse response) {
         SecurityContextHolder.clearContext();
         response.addHeader("Authorization", "");
-        return "redirect:/login";
+        return "redirect:/auth/login";
     }
 }

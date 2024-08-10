@@ -7,7 +7,10 @@ import com.example.projectbase.domain.dto.request.MemberCreateDto;
 import com.example.projectbase.domain.dto.request.MemberUpdateDto;
 import com.example.projectbase.domain.dto.response.CommonResponseDto;
 import com.example.projectbase.domain.dto.response.MemberResponseDto;
+import com.example.projectbase.domain.entity.Course;
 import com.example.projectbase.domain.entity.Member;
+
+import java.util.List;
 
 public interface MemberService {
     MemberResponseDto createMember(MemberCreateDto memberCreateDto);
@@ -17,4 +20,5 @@ public interface MemberService {
     CommonResponseDto changePassword(MemberChangePassRequestDto memberChangePassDto);
     CommonResponseDto deleteMember(String memberId);
     Member findMemberById(String id) throws Exception;
+    List<Member> getAlls();
 }

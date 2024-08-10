@@ -132,5 +132,8 @@ public class RegisterServiceImpl implements RegisterService {
         return new CommonResponseDto(true, MessageConstrant.SUCCESS);
     }
 
-
+    @Override
+    public List<Register> getAll() {
+        return registerRepository.findAll();
+    }
 }
